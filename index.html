@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PORTIFOLIO | y0kai</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="icon.png">
     <style>
         :root {
             --neon-red: #FF0F3D;
@@ -27,6 +29,67 @@
             margin: 0;
             overflow-x: hidden;
             padding-top: 80px;
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Custom Crosshair Cursor */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            filter: drop-shadow(0 0 10px rgb(255, 0, 0));
+        }
+
+        /* Prevent the default pointer cursor on clickable elements */
+        a, button, .nav-link, .contact-link, .icon-wrapper {
+            cursor: none !important;
+        }
+
+        .custom-cursor::before,
+        .custom-cursor::after {
+            content: '';
+            position: absolute;
+            background: var(--neon-red);
+            transition: all 0.2s ease-out;
+        }
+
+        .custom-cursor::before {
+            width: 100%;
+            height: 2px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .custom-cursor::after {
+            width: 2px;
+            height: 100%;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Triangle Cursor */
+        .custom-cursor.triangle-cursor {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid rebeccapurple;
+            transform: translate(-50%, -50%) rotate(0deg);
+            transition: transform 0.2s ease;
+            filter: drop-shadow(0 0 20px rgb(255, 255, 255));
+        }
+
+        .custom-cursor.triangle-cursor::before,
+        .custom-cursor.triangle-cursor::after {
+            display: none; /* Hide crosshair lines for triangle */
         }
 
         .cyber-nav {
@@ -86,7 +149,6 @@
             margin-bottom: var(--section-spacing);
             position: relative;
         }
-
 
         h1 {
             font-size: 4rem;
@@ -250,7 +312,6 @@
             transform: translateY(-50%);
         }
 
-
         @keyframes sectionEntry {
             to {
                 opacity: 1;
@@ -270,100 +331,100 @@
         }
 
         .hud-card {
-    padding: 2.5rem;
-    background: rgba(10, 10, 15, 0.8);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 15, 61, 0.1);
-    box-shadow: 
-        0 4px 20px rgba(255, 15, 61, 0.05),
-        0 0 10px rgba(255, 15, 61, 0.02);
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    position: relative;
-    overflow: hidden;
-}
+            padding: 2.5rem;
+            background: rgba(10, 10, 15, 0.8);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 15, 61, 0.1);
+            box-shadow: 
+                0 4px 20px rgba(255, 15, 61, 0.05),
+                0 0 10px rgba(255, 15, 61, 0.02);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-.hud-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 15, 61, 0.1),
-        transparent
-    );
-    transition: 0.5s;
-    pointer-events: none;
-}
+        .hud-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 15, 61, 0.1),
+                transparent
+            );
+            transition: 0.5s;
+            pointer-events: none;
+        }
 
-.hud-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 
-        0 8px 30px rgba(255, 15, 61, 0.2),
-        0 0 20px rgba(255, 15, 61, 0.1);
-    border-color: rgba(255, 15, 61, 0.3);
-}
+        .hud-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 8px 30px rgba(255, 15, 61, 0.2),
+                0 0 20px rgba(255, 15, 61, 0.1);
+            border-color: rgba(255, 15, 61, 0.3);
+        }
 
-.hud-card:hover::before {
-    left: 100%;
-}
+        .hud-card:hover::before {
+            left: 100%;
+        }
 
-.hud-card h3 {
-    color: var(--neon-red);
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-}
+        .hud-card h3 {
+            color: var(--neon-red);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
 
-.hud-card h3::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 50px;
-    height: 2px;
-    background: var(--neon-red);
-    border-radius: 2px;
-    transition: width 0.3s ease;
-}
+        .hud-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--neon-red);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
 
-.hud-card:hover h3::after {
-    width: 100%;
-}
+        .hud-card:hover h3::after {
+            width: 100%;
+        }
 
-.hud-card p {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
+        .hud-card p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
 
-.hud-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        .hud-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-.hud-card ul li {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.95rem;
-    margin-bottom: 0.75rem;
-    position: relative;
-    padding-left: 1.5rem;
-}
+        .hud-card ul li {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
 
-.hud-card ul li::before {
-    content: '▹';
-    position: absolute;
-    left: 0;
-    color: var(--neon-red);
-    font-size: 0.9rem;
-    top: 50%;
-    transform: translateY(-50%);
-}
+        .hud-card ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--neon-red);
+            font-size: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
 
         .tech-stack {
             display: flex;
@@ -566,31 +627,12 @@
                 height: 20px;
             }
         }
-
-        /* Mouse Glow Effect */
-        .mouse-glow {
-            position: fixed;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(
-                circle,
-                rgba(255, 15, 61, 0.3) 0%,
-                rgba(255, 15, 61, 0) 70%
-            );
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            filter: blur(20px);
-            z-index: 9999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="matrix-grid"></div>
-    <div class="mouse-glow"></div> <!-- Mouse Glow Element -->
+    <div class="custom-cursor"></div> <!-- Custom Crosshair Cursor -->
     <nav class="cyber-nav">
         <div class="nav-container">
             <span class="nav-logo" style="color: var(--neon-red);">LL</span>
@@ -762,47 +804,48 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Smooth scroll for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
-            });
-
-            // Intersection Observer for scroll animations
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.cyber-section').forEach((section) => {
-                observer.observe(section);
-            });
-
-            // Mouse Glow Effect
-            const glow = document.querySelector('.mouse-glow');
-
-            document.addEventListener('mousemove', (e) => {
-                glow.style.left = `${e.clientX}px`;
-                glow.style.top = `${e.clientY}px`;
-                glow.style.opacity = 0.4;
-            });
-
-            document.addEventListener('mouseleave', () => {
-                glow.style.opacity = 0;
-            });
-
-            document.addEventListener('mouseenter', () => {
-                glow.style.opacity = 0.4;
             });
         });
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.cyber-section').forEach((section) => {
+            observer.observe(section);
+        });
+
+        // Custom Crosshair Cursor
+        const cursor = document.querySelector('.custom-cursor');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add hover effects to interactive elements
+        document.querySelectorAll('a, button, .hud-card, .cyber-section, .nav-link, .contact-link').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.classList.add('triangle-cursor'); // Switch to triangle
+            });
+            element.addEventListener('mouseleave', () => {
+                cursor.classList.remove('triangle-cursor'); // Switch back to crosshair
+            });
+        });
+    });
     </script>
 </body>
 </html>
