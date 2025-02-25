@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUCAS LOPES | CYBER SECURITY</title>
+    <style>
+        :root {
+            --neon-red: #FF0F3D;
+            --cyber-black: #0A0A0F;
+            --interface-gray: #1A1A25;
+            --neon-glow: 0 0 25px rgba(255, 15, 61, 0.2);
+            --section-spacing: 8rem;
+        }
+
+        @keyframes subtleGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        body {
+            background: var(--cyber-black);
+            color: rgba(255,255,255,0.9);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        .cyber-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--interface-gray);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-red);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cyber-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .cyber-header {
+            margin-bottom: var(--section-spacing);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+            background: linear-gradient(45deg, var(--neon-red), #FF0066);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            animation: fadeSlide 1s ease-out forwards;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cyber-section {
+            position: relative;
+            margin: var(--section-spacing) 0;
+            padding: 4rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--interface-gray);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: sectionEntry 0.8s ease-out forwards;
+        }
+
+        @keyframes sectionEntry {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cyber-section:nth-child(2) { animation-delay: 0.2s; }
+        .cyber-section:nth-child(3) { animation-delay: 0.4s; }
+        .cyber-section:nth-child(4) { animation-delay: 0.6s; }
+
+        .grid-3d {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .hud-card {
+            padding: 2.5rem;
+            background: linear-gradient(160deg, 
+                rgba(26, 26, 37, 0.6) 0%,
+                rgba(10, 10, 15, 0.8) 100%);
+            border-radius: 12px;
+            border: 1px solid var(--interface-gray);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hud-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--neon-glow);
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .tech-pill {
+            padding: 0.5rem 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .matrix-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(255, 15, 61, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 15, 61, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: gridScroll 100s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+
+        @media (max-width: 1200px) {
+            .cyber-container {
+                padding: 4rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cyber-section {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+            .contact-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+        
+            .contact-card {
+                background: rgba(255, 15, 61, 0.03);
+                border: 1px solid rgba(255, 15, 61, 0.1);
+                border-radius: 12px;
+                padding: 2rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+            }
+        
+            .contact-card:hover {
+                border-color: var(--neon-red);
+                transform: translateY(-5px);
+                box-shadow: 0 4px 20px rgba(255, 15, 61, 0.1);
+            }
+        
+            .contact-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 15, 61, 0.05),
+                    transparent
+                );
+                transition: 0.5s;
+            }
+        
+            .contact-card:hover::before {
+                left: 100%;
+            }
+        
+            .contact-link {
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+                text-decoration: none;
+                color: inherit;
+            }
+        
+            .icon-wrapper {
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 15, 61, 0.05);
+                border-radius: 10px;
+                transition: all 0.3s ease;
+            }
+        
+            .contact-card:hover .icon-wrapper {
+                background: var(--neon-red);
+                transform: rotate(15deg);
+            }
+        
+            .contact-icon {
+                width: 24px;
+                height: 24px;
+                stroke: var(--neon-red);
+                transition: all 0.3s ease;
+            }
+        
+            .contact-card:hover .contact-icon {
+                stroke: var(--cyber-black);
+            }
+        
+            .contact-info h3 {
+                margin: 0;
+                font-size: 1.25rem;
+                color: var(--neon-red);
+            }
+        
+            .contact-info p {
+                margin: 0.5rem 0 0;
+                opacity: 0.8;
+                font-size: 0.95rem;
+            }
+        
+            @media (max-width: 768px) {
+                .contact-grid {
+                    grid-template-columns: 1fr;
+                }
+        
+                .contact-card {
+                    padding: 1.5rem;
+                }
+        
+                .contact-link {
+                    gap: 1rem;
+                }
+        
+                .icon-wrapper {
+                    width: 40px;
+                    height: 40px;
+                }
+        
+                .contact-icon {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="matrix-grid"></div>
+    <nav class="cyber-nav">
+        <div class="nav-container">
+            <span class="nav-logo" style="color: var(--neon-red);">LL</span>
+            <div class="nav-links">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#contact" class="nav-link">Contact Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="cyber-container">
+        <header class="cyber-header">
+            <h1>LUCAS LOPES</h1>
+            <p style="margin-top: 1.5rem; opacity: 0.8;">Malware Analysis | Penetration Testing | Digital Forensics</p>
+        </header>
+
+        <section class="cyber-section" id="about">
+            <h2>// About</h2>
+            <div class="grid-3d">
+                <div class="hud-card">
+                    <h3>Background</h3>
+                    <p>Computer Science undergraduate @ PUC Minas (2021-2026) with focus on data structures, computer architectures, operational systems and networks.</p>
+                    <div class="tech-stack">
+                        <span class="tech-pill">Java</span>
+                        <span class="tech-pill">C</span>
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">Assembly</span>
+                    </div>
+                </div>
+                <div class="hud-card">
+                    <h3>Certifications</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>► CCNA: Introduction to Networks</li>
+                        <li>► Cisco Endpoint Security</li>
+                        <li>◼ CompTIA Security+ (In Progress)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="cyber-section" id="skills">
+            <h2>// Expertise</h2>
+            <div class="grid-3d">
+                <div class="hud-card">
+                    <h3>Top Personal Projects</h3>
+                    <ul>
+                        <li>WIP</li>
+                    </ul>
+                </div>
+                <div class="hud-card">
+                    <h3>Languages</h3>
+                    <div class="tech-stack">
+                        <span class="tech-pill">🇧🇷 Portuguese (Native)</span>
+                        <span class="tech-pill">🇺🇸 English (Fluent)</span>
+                        <span class="tech-pill">🇪🇸 Spanish (Intermediate)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cyber-section" id="experience">
+            <h2>// Experience</h2>
+            <div class="grid-3d">
+                <div class="hud-card">
+                    <h3>NelCloud Solutions</h3>
+                    <p>Ticketing Manager (2022-2024)</p>
+                    <ul>
+                        <li>Managed enterprise support ticket systems </li>
+                        <li>Developed workflow automation scripts</li>
+                        <li>Managed user lifecycle in Active Directory</li>
+                    </ul>
+                </div>
+                <div class="hud-card">
+                    <h3>CTF Achievements</h3>
+                    <ul>
+                        <li>WIP</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="cyber-section" id="contact">
+            <h2>// Contact Me</h2>
+            <div class="contact-grid">
+                <!-- Email Card -->
+                <div class="contact-card">
+                    <a href="mailto:lucaslopes.cyber@gmail.com" class="contact-link">
+                        <div class="icon-wrapper">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <path d="M22 6l-10 7L2 6"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info">
+                            <h3>Email</h3>
+                            <p>lucaslopes.cyber@gmail.com</p>
+                        </div>
+                    </a>
+                </div>
+        
+                <!-- LinkedIn Card -->
+                <div class="contact-card">
+                    <a href="https://www.linkedin.com/in/lucas-lopes-2324552a4/" target="_blank" class="contact-link">
+                        <div class="icon-wrapper">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect x="2" y="9" width="4" height="12"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info">
+                            <h3>LinkedIn</h3>
+                            <p>/in/lucas-lopes</p>
+                        </div>
+                    </a>
+                </div>
+        
+                <!-- GitHub Card -->
+                <div class="contact-card">
+                    <a href="https://github.com/L-Lukke" target="_blank" class="contact-link">
+                        <div class="icon-wrapper">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info">
+                            <h3>GitHub</h3>
+                            <p>@L-Lukke</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scroll for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Intersection Observer for scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.cyber-section').forEach((section) => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
