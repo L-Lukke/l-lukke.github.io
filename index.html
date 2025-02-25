@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,6 +87,7 @@
             position: relative;
         }
 
+
         h1 {
             font-size: 4rem;
             margin: 0;
@@ -97,6 +99,43 @@
             letter-spacing: -0.03em;
             opacity: 0;
             animation: fadeSlide 1s ease-out forwards;
+            position: relative;
+            text-shadow: 
+                0 0 2px rgba(255, 15, 61, 0.1),
+                0 0 5px rgba(255, 15, 61, 0.05);
+            animation: glowPulse 2s infinite alternate ease-in-out;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--neon-red), #FF0066);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: blur(20px);
+            z-index: -1;
+            opacity: 0.2;
+            animation: glowPulse 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0.5;
+                text-shadow: 
+                    0 0 5px rgba(255, 15, 61, 0.1),
+                    0 0 10px rgba(255, 15, 61, 0.05);
+            }
+            100% {
+                opacity: 1;
+                text-shadow: 
+                    0 0 20px rgba(255, 15, 61, 0.8),
+                    0 0 40px rgba(255, 15, 61, 0.9),
+                    0 0 80px rgba(255, 15, 61, 1);
+            }
         }
 
         @keyframes fadeSlide {
@@ -117,12 +156,100 @@
             background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
             border-radius: 16px;
-            border: 1px solid var(--interface-gray);
+            border: 1px solid rgba(255, 15, 61, 0.05);
+            box-shadow: 
+                0 4px 20px rgba(255, 15, 61, 0.02),
+                0 0 10px rgba(255, 15, 61, 0.01);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             opacity: 0;
             transform: translateY(30px);
             animation: sectionEntry 0.8s ease-out forwards;
+            overflow: hidden;
         }
+
+        .cyber-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 15, 61, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .cyber-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 6px 30px rgba(255, 15, 61, 0.05),
+                0 0 15px rgba(255, 15, 61, 0.02);
+            border-color: rgba(255, 15, 61, 0.1);
+        }
+
+        .cyber-section:hover::before {
+            left: 100%;
+        }
+
+        .cyber-section h2 {
+            color: var(--neon-red);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .cyber-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--neon-red);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .cyber-section:hover h2::after {
+            width: 100%;
+        }
+
+        .cyber-section p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .cyber-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cyber-section ul li {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .cyber-section ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--neon-red);
+            font-size: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
 
         @keyframes sectionEntry {
             to {
@@ -143,19 +270,100 @@
         }
 
         .hud-card {
-            padding: 2.5rem;
-            background: linear-gradient(160deg, 
-                rgba(26, 26, 37, 0.6) 0%,
-                rgba(10, 10, 15, 0.8) 100%);
-            border-radius: 12px;
-            border: 1px solid var(--interface-gray);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    padding: 2.5rem;
+    background: rgba(10, 10, 15, 0.8);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 15, 61, 0.1);
+    box-shadow: 
+        0 4px 20px rgba(255, 15, 61, 0.05),
+        0 0 10px rgba(255, 15, 61, 0.02);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
 
-        .hud-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--neon-glow);
-        }
+.hud-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 15, 61, 0.1),
+        transparent
+    );
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.hud-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 8px 30px rgba(255, 15, 61, 0.2),
+        0 0 20px rgba(255, 15, 61, 0.1);
+    border-color: rgba(255, 15, 61, 0.3);
+}
+
+.hud-card:hover::before {
+    left: 100%;
+}
+
+.hud-card h3 {
+    color: var(--neon-red);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.hud-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--neon-red);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.hud-card:hover h3::after {
+    width: 100%;
+}
+
+.hud-card p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.hud-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hud-card ul li {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.hud-card ul li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--neon-red);
+    font-size: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
         .tech-stack {
             display: flex;
@@ -182,8 +390,8 @@
             pointer-events: none;
             z-index: -1;
             background-image: 
-                linear-gradient(rgba(255, 15, 61, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 15, 61, 0.05) 1px, transparent 1px);
+                linear-gradient(rgba(255, 15, 61, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 15, 61, 0.1) 1px, transparent 1px);
             background-size: 20px 20px;
             animation: gridScroll 100s linear infinite;
         }
@@ -245,124 +453,144 @@
             }
         }
 
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 15, 61, 0.03);
+            border: 1px solid rgba(255, 15, 61, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card:hover {
+            border-color: var(--neon-red);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(255, 15, 61, 0.1);
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 15, 61, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .contact-card:hover::before {
+            left: 100%;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .icon-wrapper {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 15, 61, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover .icon-wrapper {
+            background: var(--neon-red);
+            transform: rotate(15deg);
+        }
+
+        .contact-icon {
+            width: 24px;
+            height: 24px;
+            stroke: var(--neon-red);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover .contact-icon {
+            stroke: var(--cyber-black);
+        }
+
+        .contact-info h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--neon-red);
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0 0;
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
             .contact-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 2rem;
-                margin-top: 2rem;
+                grid-template-columns: 1fr;
             }
-        
+
             .contact-card {
-                background: rgba(255, 15, 61, 0.03);
-                border: 1px solid rgba(255, 15, 61, 0.1);
-                border-radius: 12px;
-                padding: 2rem;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
+                padding: 1.5rem;
             }
-        
-            .contact-card:hover {
-                border-color: var(--neon-red);
-                transform: translateY(-5px);
-                box-shadow: 0 4px 20px rgba(255, 15, 61, 0.1);
-            }
-        
-            .contact-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(255, 15, 61, 0.05),
-                    transparent
-                );
-                transition: 0.5s;
-            }
-        
-            .contact-card:hover::before {
-                left: 100%;
-            }
-        
+
             .contact-link {
-                display: flex;
-                align-items: center;
-                gap: 1.5rem;
-                text-decoration: none;
-                color: inherit;
+                gap: 1rem;
             }
-        
+
             .icon-wrapper {
-                width: 50px;
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255, 15, 61, 0.05);
-                border-radius: 10px;
-                transition: all 0.3s ease;
+                width: 40px;
+                height: 40px;
             }
-        
-            .contact-card:hover .icon-wrapper {
-                background: var(--neon-red);
-                transform: rotate(15deg);
-            }
-        
+
             .contact-icon {
-                width: 24px;
-                height: 24px;
-                stroke: var(--neon-red);
-                transition: all 0.3s ease;
+                width: 20px;
+                height: 20px;
             }
-        
-            .contact-card:hover .contact-icon {
-                stroke: var(--cyber-black);
-            }
-        
-            .contact-info h3 {
-                margin: 0;
-                font-size: 1.25rem;
-                color: var(--neon-red);
-            }
-        
-            .contact-info p {
-                margin: 0.5rem 0 0;
-                opacity: 0.8;
-                font-size: 0.95rem;
-            }
-        
-            @media (max-width: 768px) {
-                .contact-grid {
-                    grid-template-columns: 1fr;
-                }
-        
-                .contact-card {
-                    padding: 1.5rem;
-                }
-        
-                .contact-link {
-                    gap: 1rem;
-                }
-        
-                .icon-wrapper {
-                    width: 40px;
-                    height: 40px;
-                }
-        
-                .contact-icon {
-                    width: 20px;
-                    height: 20px;
-                }
-            }
+        }
+
+        /* Mouse Glow Effect */
+        .mouse-glow {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(
+                circle,
+                rgba(255, 15, 61, 0.3) 0%,
+                rgba(255, 15, 61, 0) 70%
+            );
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            filter: blur(20px);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="matrix-grid"></div>
+    <div class="mouse-glow"></div> <!-- Mouse Glow Element -->
     <nav class="cyber-nav">
         <div class="nav-container">
             <span class="nav-logo" style="color: var(--neon-red);">LL</span>
@@ -428,16 +656,16 @@
                 <div class="hud-card">
                     <h3>Certifications</h3>
                     <ul style="list-style: none; padding: 0;">
-                        <li>► CCNA: Introduction to Networks</li>
-                        <li>► Cisco Endpoint Security</li>
-                        <li>◼ CompTIA Security+ (In Progress)</li>
+                        <li>CCNA: Introduction to Networks</li>
+                        <li>Cisco Endpoint Security</li>
+                        <li>CompTIA Security+ (In Progress)</li>
                     </ul>
                 </div>
             </div>
         </section>
 
         <section class="cyber-section" id="skills">
-            <h2>// Expertise</h2>
+            <h2>// Skills</h2>
             <div class="grid-3d">
                 <div class="hud-card">
                     <h3>Top Personal Projects</h3>
@@ -480,22 +708,7 @@
         <section class="cyber-section" id="contact">
             <h2>// Contact Me</h2>
             <div class="contact-grid">
-                <!-- Email Card -->
-                <div class="contact-card">
-                    <a href="mailto:lucaslopes.cyber@gmail.com" class="contact-link">
-                        <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <path d="M22 6l-10 7L2 6"/>
-                            </svg>
-                        </div>
-                        <div class="contact-info">
-                            <h3>Email</h3>
-                            <p>lucaslopes.cyber@gmail.com</p>
-                        </div>
-                    </a>
-                </div>
-        
+
                 <!-- LinkedIn Card -->
                 <div class="contact-card">
                     <a href="https://www.linkedin.com/in/lucas-lopes-2324552a4/" target="_blank" class="contact-link">
@@ -527,6 +740,22 @@
                         </div>
                     </a>
                 </div>
+
+                <!-- Email Card -->
+                <div class="contact-card">
+                    <a href="mailto:lucaslopes.cyber@gmail.com" class="contact-link">
+                        <div class="icon-wrapper">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <path d="M22 6l-10 7L2 6"/>
+                            </svg>
+                        </div>
+                        <div class="contact-info">
+                            <h3>Email</h3>
+                            <p>lucaslopes.cyber@gmail.com</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
     </div>
@@ -555,6 +784,23 @@
 
             document.querySelectorAll('.cyber-section').forEach((section) => {
                 observer.observe(section);
+            });
+
+            // Mouse Glow Effect
+            const glow = document.querySelector('.mouse-glow');
+
+            document.addEventListener('mousemove', (e) => {
+                glow.style.left = `${e.clientX}px`;
+                glow.style.top = `${e.clientY}px`;
+                glow.style.opacity = 0.4;
+            });
+
+            document.addEventListener('mouseleave', () => {
+                glow.style.opacity = 0;
+            });
+
+            document.addEventListener('mouseenter', () => {
+                glow.style.opacity = 0.4;
             });
         });
     </script>
