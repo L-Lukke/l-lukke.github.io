@@ -2,692 +2,100 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>y0kai</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>L-Lukke</title>
+
+    <!-- SEO & Social -->
+    <meta name="description"
+        content="Lucas Lopes — Malware Analysis, Penetration Testing, and Digital Forensics. CS undergrad @ PUC Minas." />
+    <meta property="og:title" content="Lucas Lopes — Security Portfolio" />
+    <meta property="og:description" content="Malware Analysis • PenTesting • DFIR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0A0A0F" />
+
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="icon.png">
-    <style>
-        :root {
-            --neon-red: #FF0F3D;
-            --cyber-black: #0A0A0F;
-            --interface-gray: #1A1A25;
-            --neon-glow: 0 0 25px rgba(255, 15, 61, 0.2);
-            --section-spacing: 8rem;
-        }
-
-        @keyframes subtleGlow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-
-        body {
-            background: var(--cyber-black);
-            color: rgba(255,255,255,0.9);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            overflow-x: hidden;
-            padding-top: 80px;
-            cursor: none; /* Hide default cursor */
-        }
-
-        /* Custom Crosshair Cursor */
-        .custom-cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            transition: transform 0.1s ease-out;
-            filter: drop-shadow(0 0 10px rgb(255, 0, 0));
-        }
-
-        /* Prevent the default pointer cursor on clickable elements */
-        a, button, .nav-link, .contact-link, .icon-wrapper {
-            cursor: none !important;
-        }
-
-        .custom-cursor::before,
-        .custom-cursor::after {
-            content: '';
-            position: absolute;
-            background: var(--neon-red);
-            transition: all 0.2s ease-out;
-        }
-
-        .custom-cursor::before {
-            width: 100%;
-            height: 2px;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-        }
-
-        .custom-cursor::after {
-            width: 2px;
-            height: 100%;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* Triangle Cursor */
-        .custom-cursor.triangle-cursor {
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 20px solid rebeccapurple;
-            transform: translate(-50%, -50%) rotate(0deg);
-            transition: transform 0.2s ease;
-            filter: drop-shadow(0 0 20px rgb(255, 255, 255));
-        }
-
-        .custom-cursor.triangle-cursor::before,
-        .custom-cursor.triangle-cursor::after {
-            display: none; /* Hide crosshair lines for triangle */
-        }
-
-        .cyber-nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--interface-gray);
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            position: relative;
-            padding: 0.5rem 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--neon-red);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .cyber-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 6rem 2rem;
-        }
-
-        .cyber-header {
-            margin-bottom: var(--section-spacing);
-            position: relative;
-        }
-
-        h1 {
-            font-size: 4rem;
-            margin: 0;
-            background: linear-gradient(45deg, var(--neon-red), #FF0066);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-family: 'Space Grotesk', sans-serif;
-            line-height: 1;
-            letter-spacing: -0.03em;
-            opacity: 0;
-            animation: fadeSlide 1s ease-out forwards;
-            position: relative;
-            text-shadow: 
-                0 0 2px rgba(255, 15, 61, 0.1),
-                0 0 5px rgba(255, 15, 61, 0.05);
-            animation: glowPulse 2s infinite alternate ease-in-out;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--neon-red), #FF0066);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: blur(20px);
-            z-index: -1;
-            opacity: 0.2;
-            animation: glowPulse 5s infinite alternate ease-in-out;
-        }
-
-        @keyframes glowPulse {
-            0% {
-                opacity: 0.5;
-                text-shadow: 
-                    0 0 5px rgba(255, 15, 61, 0.1),
-                    0 0 10px rgba(255, 15, 61, 0.05);
-            }
-            100% {
-                opacity: 1;
-                text-shadow: 
-                    0 0 20px rgba(255, 15, 61, 0.8),
-                    0 0 40px rgba(255, 15, 61, 0.9),
-                    0 0 80px rgba(255, 15, 61, 1);
-            }
-        }
-
-        @keyframes fadeSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cyber-section {
-            position: relative;
-            margin: var(--section-spacing) 0;
-            padding: 4rem;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 15, 61, 0.05);
-            box-shadow: 
-                0 4px 20px rgba(255, 15, 61, 0.02),
-                0 0 10px rgba(255, 15, 61, 0.01);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: sectionEntry 0.8s ease-out forwards;
-            overflow: hidden;
-        }
-
-        .cyber-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 15, 61, 0.05),
-                transparent
-            );
-            transition: 0.5s;
-            pointer-events: none;
-        }
-
-        .cyber-section:hover {
-            transform: translateY(-3px);
-            box-shadow: 
-                0 6px 30px rgba(255, 15, 61, 0.05),
-                0 0 15px rgba(255, 15, 61, 0.02);
-            border-color: rgba(255, 15, 61, 0.1);
-        }
-
-        .cyber-section:hover::before {
-            left: 100%;
-        }
-
-        .cyber-section h2 {
-            color: var(--neon-red);
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .cyber-section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background: var(--neon-red);
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .cyber-section:hover h2::after {
-            width: 100%;
-        }
-
-        .cyber-section p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .cyber-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .cyber-section ul li {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .cyber-section ul li::before {
-            content: '▹';
-            position: absolute;
-            left: 0;
-            color: var(--neon-red);
-            font-size: 0.9rem;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        @keyframes sectionEntry {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cyber-section:nth-child(2) { animation-delay: 0.2s; }
-        .cyber-section:nth-child(3) { animation-delay: 0.4s; }
-        .cyber-section:nth-child(4) { animation-delay: 0.6s; }
-
-        .grid-3d {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            position: relative;
-        }
-
-        .hud-card {
-            padding: 2.5rem;
-            background: rgba(10, 10, 15, 0.8);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 15, 61, 0.1);
-            box-shadow: 
-                0 4px 20px rgba(255, 15, 61, 0.05),
-                0 0 10px rgba(255, 15, 61, 0.02);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hud-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 15, 61, 0.1),
-                transparent
-            );
-            transition: 0.5s;
-            pointer-events: none;
-        }
-
-        .hud-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 8px 30px rgba(255, 15, 61, 0.2),
-                0 0 20px rgba(255, 15, 61, 0.1);
-            border-color: rgba(255, 15, 61, 0.3);
-        }
-
-        .hud-card:hover::before {
-            left: 100%;
-        }
-
-        .hud-card h3 {
-            color: var(--neon-red);
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .hud-card h3::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background: var(--neon-red);
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .hud-card:hover h3::after {
-            width: 100%;
-        }
-
-        .hud-card p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .hud-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .hud-card ul li {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .hud-card ul li::before {
-            content: '▹';
-            position: absolute;
-            left: 0;
-            color: var(--neon-red);
-            font-size: 0.9rem;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tech-stack {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .tech-pill {
-            padding: 0.5rem 1.2rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 100px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.2s ease;
-        }
-
-        .matrix-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            background-image: 
-                linear-gradient(rgba(255, 15, 61, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 15, 61, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-            animation: gridScroll 100s linear infinite;
-        }
-
-        .header-icons .icon-wrapper {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 15, 61, 0.05);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .header-icons .contact-icon {
-            width: 24px;
-            height: 24px;
-            stroke: var(--neon-red);
-            transition: all 0.3s ease;
-        }
-
-        .header-icons .contact-link:hover .icon-wrapper {
-            background: var(--neon-red);
-            transform: rotate(15deg);
-        }
-
-        .header-icons .contact-link:hover .contact-icon {
-            stroke: var(--cyber-black);
-        }
-
-        @keyframes gridScroll {
-            0% { background-position: 0 0; }
-            100% { background-position: 1000px 1000px; }
-        }
-
-        @media (max-width: 1200px) {
-            .cyber-container {
-                padding: 4rem 1.5rem;
-            }
-
-            h1 {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .cyber-section {
-                padding: 2rem;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .contact-card {
-            background: rgba(255, 15, 61, 0.03);
-            border: 1px solid rgba(255, 15, 61, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-card:hover {
-            border-color: var(--neon-red);
-            transform: translateY(-5px);
-            box-shadow: 0 4px 20px rgba(255, 15, 61, 0.1);
-        }
-
-        .contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 15, 61, 0.05),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .contact-card:hover::before {
-            left: 100%;
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .icon-wrapper {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 15, 61, 0.05);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .contact-card:hover .icon-wrapper {
-            background: var(--neon-red);
-            transform: rotate(15deg);
-        }
-
-        .contact-icon {
-            width: 24px;
-            height: 24px;
-            stroke: var(--neon-red);
-            transition: all 0.3s ease;
-        }
-
-        .contact-card:hover .contact-icon {
-            stroke: var(--cyber-black);
-        }
-
-        .contact-info h3 {
-            margin: 0;
-            font-size: 1.25rem;
-            color: var(--neon-red);
-        }
-
-        .contact-info p {
-            margin: 0.5rem 0 0;
-            opacity: 0.8;
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 768px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-card {
-                padding: 1.5rem;
-            }
-
-            .contact-link {
-                gap: 1rem;
-            }
-
-            .icon-wrapper {
-                width: 40px;
-                height: 40px;
-            }
-
-            .contact-icon {
-                width: 20px;
-                height: 20px;
-            }
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="icon.png" />
+
+    <!-- Fonts (preconnect + swap) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
 </head>
+
+<link rel="stylesheet" href="assets/styles.css" />
+<script src="assets/main.js" defer> </script>
+
 <body>
-    <div class="matrix-grid"></div>
-    <div class="custom-cursor"></div> <!-- Custom Crosshair Cursor -->
-    <nav class="cyber-nav">
+    <div class="matrix-grid" aria-hidden="true"></div>
+    <div class="custom-cursor" aria-hidden="true"></div>
+
+    <nav class="cyber-nav" aria-label="Primary">
         <div class="nav-container">
-            <span class="nav-logo" style="color: var(--neon-red);">LL</span>
-            <div class="nav-links">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#skills" class="nav-link">Skills</a>
-                <a href="#experience" class="nav-link">Experience</a>
-                <a href="#contact" class="nav-link">Contact Me</a>
+            <a href="#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+            <div class="nav-links" role="menubar">
+                <a href="#academic" class="nav-link" role="menuitem">Academic</a>
+                <a href="#work" class="nav-link" role="menuitem">Work</a>
+                <a href="#blog" class="nav-link" role="menuitem">Blog</a>
+                <a href="#contact" class="nav-link" role="menuitem">Contact Me</a>
             </div>
         </div>
     </nav>
 
-    <div class="cyber-container">
+    <div id="top" class="cyber-container">
         <header class="cyber-header">
             <h1>LUCAS LOPES</h1>
             <p style="margin-top: 1.5rem; opacity: 0.8;">Malware Analysis | Penetration Testing | Digital Forensics</p>
             <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
-                <!-- LinkedIn Icon -->
-                <a href="https://www.linkedin.com/in/lucas-lopes-2324552a4/" target="_blank" class="contact-link">
+                <!-- LinkedIn -->
+                <a aria-label="LinkedIn: Lucas Lopes" href="https://www.linkedin.com/in/lucas-a-lopes/" target="_blank"
+                    rel="noopener noreferrer" class="contact-link">
                     <div class="icon-wrapper">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                            <rect x="2" y="9" width="4" height="12"/>
-                            <circle cx="4" cy="4" r="2"/>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            aria-hidden="true">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                            <rect x="2" y="9" width="4" height="12" />
+                            <circle cx="4" cy="4" r="2" />
                         </svg>
                     </div>
                 </a>
-                
-                <!-- GitHub Icon -->
-                <a href="https://github.com/L-Lukke" target="_blank" class="contact-link">
+                <!-- GitHub -->
+                <a aria-label="GitHub: L-Lukke" href="https://github.com/L-Lukke" target="_blank"
+                    rel="noopener noreferrer" class="contact-link">
                     <div class="icon-wrapper">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            aria-hidden="true">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                         </svg>
                     </div>
                 </a>
-        
-                <!-- Email Icon -->
-                <a href="mailto:lucaslopes.cyber@gmail.com" class="contact-link">
+                <!-- Email -->
+                <a aria-label="Email: lucaslopes.cyber@gmail.com" href="mailto:lucaslopes.cyber@gmail.com"
+                    class="contact-link">
                     <div class="icon-wrapper">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <path d="M22 6l-10 7L2 6"/>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            aria-hidden="true">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <path d="M22 6l-10 7L2 6" />
                         </svg>
                     </div>
                 </a>
             </div>
         </header>
 
-        <section class="cyber-section" id="about">
-            <h2>// About</h2>
+        <section class="cyber-section" id="academic">
+            <h2>// Academic</h2>
             <div class="grid-3d">
                 <div class="hud-card">
                     <h3>Background</h3>
-                    <p>Computer Science undergraduate @ PUC Minas (2021-2026) with focus on data structures, computer architectures, operational systems and networks.</p>
+                    <p>Computer Science undergraduate @ PUC Minas (2021-2026) with focus on data structures, computer
+                        architectures, operational systems and networks.</p>
                     <div class="tech-stack">
                         <span class="tech-pill">Java</span>
                         <span class="tech-pill">C</span>
@@ -697,7 +105,7 @@
                 </div>
                 <div class="hud-card">
                     <h3>Certifications</h3>
-                    <ul style="list-style: none; padding: 0;">
+                    <ul>
                         <li>CCNA: Introduction to Networks</li>
                         <li>Cisco Endpoint Security</li>
                         <li>CompTIA Security+ (In Progress)</li>
@@ -706,74 +114,64 @@
             </div>
         </section>
 
-        <section class="cyber-section" id="skills">
-            <h2>// Skills</h2>
-            <div class="grid-3d">
-                <div class="hud-card">
-                    <h3>Top Personal Projects</h3>
-                    <ul>
-                        <li>WIP</li>
-                    </ul>
-                </div>
-                <div class="hud-card">
-                    <h3>Languages</h3>
-                    <div class="tech-stack">
-                        <span class="tech-pill">🇧🇷 Portuguese (Native)</span>
-                        <span class="tech-pill">🇺🇸 English (Fluent)</span>
-                        <span class="tech-pill">🇪🇸 Spanish (Intermediate)</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cyber-section" id="experience">
-            <h2>// Experience</h2>
+        <section class="cyber-section" id="work">
+            <h2>// Work</h2>
             <div class="grid-3d">
                 <div class="hud-card">
                     <h3>NelCloud Solutions</h3>
                     <p>Ticketing Manager (2022-2024)</p>
                     <ul>
-                        <li>Managed enterprise support ticket systems </li>
+                        <li>Managed enterprise support ticket systems</li>
                         <li>Developed workflow automation scripts</li>
                         <li>Managed user lifecycle in Active Directory</li>
-                    </ul>
-                </div>
-                <div class="hud-card">
-                    <h3>CTF Achievements</h3>
-                    <ul>
-                        <li>WIP</li>
                     </ul>
                 </div>
             </div>
         </section>
 
+        <section class="cyber-section" id="blog">
+            <h2>// Blog</h2>
+            <p class="post-intro">
+                RE - Reverse Engineering; VL - Vulnerability; OP - Opinion
+            </p>
+
+            <ol class="post-list">
+                <li><a href="blog/pwwrd-table/">RE - Psswrd Table</a></li>
+                <li><a href="#">RE - Overflowing Key</a></li>
+                <li><a href="#">RE - Cookie Export DLL</a></li>
+            </ol>
+        </section>
+
         <section class="cyber-section" id="contact">
             <h2>// Contact Me</h2>
             <div class="contact-grid">
-
-                <!-- LinkedIn Card -->
                 <div class="contact-card">
-                    <a href="https://www.linkedin.com/in/lucas-lopes-2324552a4/" target="_blank" class="contact-link">
+                    <a aria-label="LinkedIn: Lucas Lopes" href="https://www.linkedin.com/in/lucas-a-lopes/"
+                        target="_blank" rel="noopener noreferrer" class="contact-link">
                         <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                                <rect x="2" y="9" width="4" height="12"/>
-                                <circle cx="4" cy="4" r="2"/>
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect x="2" y="9" width="4" height="12" />
+                                <circle cx="4" cy="4" r="2" />
                             </svg>
                         </div>
                         <div class="contact-info">
                             <h3>LinkedIn</h3>
-                            <p>/in/lucas-lopes</p>
+                            <p>/in/lucas-a-lopes</p>
                         </div>
                     </a>
                 </div>
-        
-                <!-- GitHub Card -->
+
                 <div class="contact-card">
-                    <a href="https://github.com/L-Lukke" target="_blank" class="contact-link">
+                    <a aria-label="GitHub: L-Lukke" href="https://github.com/L-Lukke" target="_blank"
+                        rel="noopener noreferrer" class="contact-link">
                         <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                             </svg>
                         </div>
                         <div class="contact-info">
@@ -783,13 +181,14 @@
                     </a>
                 </div>
 
-                <!-- Email Card -->
                 <div class="contact-card">
-                    <a href="mailto:lucaslopes.cyber@gmail.com" class="contact-link">
+                    <a aria-label="Email: lucaslopes.cyber@gmail.com" href="mailto:lucaslopes.cyber@gmail.com"
+                        class="contact-link">
                         <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <path d="M22 6l-10 7L2 6"/>
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <path d="M22 6l-10 7L2 6" />
                             </svg>
                         </div>
                         <div class="contact-info">
@@ -802,50 +201,14 @@
         </section>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Intersection Observer for scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.cyber-section').forEach((section) => {
-            observer.observe(section);
-        });
-
-        // Custom Crosshair Cursor
-        const cursor = document.querySelector('.custom-cursor');
-
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
-        });
-
-        // Add hover effects to interactive elements
-        document.querySelectorAll('a, button, .nav-link, .contact-link').forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                cursor.classList.add('triangle-cursor'); // Switch to triangle
-            });
-            element.addEventListener('mouseleave', () => {
-                cursor.classList.remove('triangle-cursor'); // Switch back to crosshair
-            });
-        });
-    });
-    </script>
+    <noscript>
+        <style>
+            .cyber-section {
+                opacity: 1 !important;
+                transform: none !important
+            }
+        </style>
+    </noscript>
 </body>
+
 </html>
