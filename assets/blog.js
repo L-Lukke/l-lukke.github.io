@@ -1,10 +1,9 @@
 const scriptUrl = document.currentScript?.src || '';
 const pathParts = new URL(scriptUrl).pathname.split('/').filter(Boolean);
-const BASE = pathParts.length > 1 ? `/${pathParts[0]}` : '';
 
 async function loadPosts(limit = null) {
   try {
-    const res = await fetch(`${BASE}/blog/posts.json`, { cache: 'no-store' });
+    const res = await fetch(`/blog/posts.json`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Failed to load posts.json');
     const posts = await res.json();
 
@@ -23,7 +22,7 @@ function renderList(posts, olEl) {
     return;
   }
   olEl.innerHTML = posts
-    .map(p => `<li><a href="${BASE}${p.url}">${p.tag} - ${p.title.replace(/^.*?(?:—|-)\s*/, '')}</a></li>`)
+    .map(p => `<li><a href="${p.url}">${p.tag} - ${p.title.replace(/^.*?(?:—|-)\s*/, '')}</a></li>`)
     .join('');
 }
 
