@@ -16,12 +16,12 @@
     "description": "Stack discipline, mitigations, and modern compilers."
   },
   {
-    "slug": "cookie-export-dll",
-    "title": "Cookie Export DLL",
+    "slug": "cookie-trafficking",
+    "title": "Cookie Trafficking DLL",
     "tag": "RE",
-    "date": "2025-05-10",
-    "url": "/blog/cookie-export-dll/",
-    "description": "Hooking, DLL search order, and sandboxing notes."
+    "date": "2025-08-01",
+    "url": "/blog/cookie-trafficking/",
+    "description": "Reverse engineering a suspicious DLL, from anti-analysis tricks to elusive stage-3 payloads."
   },
   {
     "slug": "halting-problem-always-wins",

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cookie Trafficking DLL</title>
+
+  <link rel="icon" type="image/x-icon" href="/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/blog-post.css" />
+  <script defer src="/assets/main.js"></script>
+</head>
+
+<body>
+  <div class="matrix-grid" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+
+  <nav class="cyber-nav" aria-label="Primary">
+    <div class="nav-container">
+      <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+      <div class="nav-links" role="menubar">
+        <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
+        <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="cyber-container">
+    <header class="cyber-section" id="overview">
+      <h1>Cookie Trafficking DLL</h1>
+      <p class="post-meta">Tools used: DLL • Ghidra • x64dbg • VMware (Kali; Tiny10)</p>
+      <p class="post-intro">
+        My main goal here was to thoroughly analyze a DLL, highlighting its effects on the machine.
+      </p>
+
+      <nav class="post-list" aria-label="Write-up sections">
+        <ol>
+          <li><a href="#strings">Strings</a></li>
+          <li><a href="#pdb-info">PDB Info</a></li>
+          <li><a href="#anti-analysis">Anti-Analysis</a></li>
+          <li><a href="#exportspartan">ExportSpartanCookies</a></li>
+          <li><a href="#dynamic-analysis">Dynamic Analysis</a></li>
+          <li><a href="#shellcode">The Shellcode</a></li>
+        </ol>
+      </nav>
+    </header>
+
+    <section class="cyber-section" id="strings">
+      <h2>// Strings</h2>
+      <p>
+        The first thing I did was run the "strings" command to start to dig into the DLL, and from that alone I knew I
+        had a long road ahead of me.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/strings.webp" alt="strings-output-screenshot">
+        <figcaption>Selected strings from the binary</figcaption>
+      </figure>
+
+      <p>
+        I'm going to be honest: I didn't know what frightened me more — the possible dynamic importing of DLLs, the
+        possible dynamic memory allocation with VirtualAlloc and VirtualProtect or the possible anti-Debugger/VM with
+        IsDebuggerPresent and IsProcessorFeaturePresent. Despite that, the command gave me important information about
+        what I was dealing with (at the time I didn't know how bad it was really going to get haha).
+      </p>
+    </section>
+
+    <section class="cyber-section" id="pdb-info">
+      <h2>// PDB Info</h2>
+      <p>
+        Before continuing, I would like to talk a little about PDB file info that was potentially leaked in this dll.
+      </p>
+      <figure class="post-figure">
+        <img src="images/pdb-leak.webp" alt="PDB-info-(ghidra)">
+        <figcaption>PDB path evidence in Ghidra</figcaption>
+      </figure>
+      <p>
+        As per the image, some intel (like the path as in
+        "C:\Users\Steve\Desktop\proj\badguy\TestCPP\x64\Release\DumbNineScrollDieLikeLynal.pdb") was in the open in this
+        section. It's unusual to have this type of information actually being real, as it can be tampered with, so most
+        of it is normally misleading or outright fake, but it's cool to observe nonetheless. But that is not the topic
+        for today, so let us continue.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="anti-analysis">
+      <h2>// Anti-Analysis</h2>
+      <p>
+        Naturally, after a preliminary analysis with strings, I fired up the Kali machine and threw the DLL inside
+        Ghidra to take a more in-depth look into it. It didn't take me long to find two very interesting functions
+        inside it.
+      </p>
+
+      <h3>Anti-analysis techniques:</h3>
+
+      <figure class="post-figure">
+        <img src="images/anti-analysis-A.webp" alt="anti-analysis-A">
+        <figcaption><code>IsProcessorFeaturePresent()</code> with the <code>0x17</code> (decimal <code>23</code>)
+          argument checks if the feature <code>_fastfail()</code> is available in that specific processor. If it returns
+          anything other than 0 (in other words, if the feature is available) the program ends abruptly</figcaption>
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/anti-analysis-B.webp" alt="anti-analysis-B">
+        <figcaption>Then <code>IsDebuggerPresent()</code> is called to check if the process is being executed within a
+          debugger. If the program is being executed within a debugger, the return value is 1, so the conditional below
+          it doesn't execute, possibly changing completely the whole program.
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/anti-analysis-C.webp" alt="anti-analysis-C">
+        <figcaption>Then, it performs manual stack unwinding using <code>RtlVirtualUnwind</code>, simulating the return
+          from a function without actually executing a <code>ret</code>; which is commonly used in stack spoofing and
+          anti-analysis.
+      </figure>
+    </section>
+
+    <!-- ExportSpartanCookies -->
+    <section class="cyber-section" id="exportspartan">
+      <h2>// ExportSpartanCookies</h2>
+      <p>
+        Secondly, the next function that I found interesting was the <strong>ExportSpartanCookies</strong>, which
+        honestly deserves its own section.
+      </p>
+
+      <p>
+        So here's where the magic happens. And a lot of it, a Merlin type situation. I'm not going to go through it
+        instruction by instruction because it would be very exhausting, but instead I will focus on the main parts of
+        the function. The first interesting part here shows a dynamic resolution and use of Windows Sockets (Winsock)
+        functions for network communication.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/winsock.webp" alt="Network/Key handling">
+        <figcaption>Network stage and key handling</figcaption>
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/link.webp" alt="link">
+        <figcaption>Location of connection address</figcaption>
+      </figure>
+
+      <p>
+        First, it loads <code>Ws2_32.dll</code> for socket communication, then it iterates up to <code>0x200</code>
+        times, calling <code>GetProcAddress</code> using numerical values cast as strings (I sincerely can't come up for
+        a why here, only obfuscation would make sense). Then it stores function pointers in the table
+        <code>local_1498</code> and uses <code>iVar3</code> to initialize Winsock dynamically with the
+        <code>[0x73]</code> address (WSAStartup), then it checks the value of the variable (<code>0 ==</code> no errors
+        occurred) and uses it to initialize socket connection. It proceeds, then, to sendto (<code>0x14</code>) address
+        <code>acme-checker-test.letsencrypt.one</code>, and recvfrom (<code>0x11</code>) up to <code>0x400</code> bytes
+        via UDP connection (soon we will dive into exactly what).
+      </p>
+
+      <p>
+        Next, we will dive into the next big part of the function: the decryption.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/decryption.webp" alt="shellcode decryption">
+        <figcaption>Decryption loop</figcaption>
+      </figure>
+
+      <p>
+        What happens here is that <code>_Dst</code>, that's essentially a memory position that copied stuff from
+        <code>_Src</code> earlier in the code, is being decrypted in-memory via rolling XOR key using
+        <code>local498</code> array hardcoded 32-byte key, then marking that memory region as executable
+        (<code>0x20 == PAGE_EXECUTE_READ</code>) and executing it. So, all I had to do was decrypt that memory region
+        using the key and analyze it, right?
+      </p>
+
+      <p>
+        So I did it. And it failed. All that was there was bogus code that, if executed, would crash the program
+        instantly. Surely I was missing something. After a bit of staring blankly at the screen it just jumped at me:
+        what the malware was receiving via socket was the decryption key (in a very clever way, passing it to another
+        variable that overflows and ends up filling the <code>local_498</code> array). The hardcoded one was just a
+        distraction. I then proceeded to investigate this theory and… voilà.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/key-retrieval.webp" alt="key retrieval">
+        <figcaption>Online key retrieval</figcaption>
+      </figure>
+
+      <p>
+        But the high did not last very long. After trying to decrypt the shellcode using this key, I took a GIANT
+        detour, as it decrypted into an… OpenPGP Secret Key?? What?
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/openpgp.webp" alt="OpenPGP">
+      </figure>
+
+      <p>
+        So I tried to get the file to tell me something by doing a lot of random shenanigans with it, most of which are
+        not even worth mentioning, and there went a good 6 hours of work. I went to sleep, frustrated.
+      </p>
+
+      <p>
+        When I woke up the next day and jumped right into this again, I was certain I did something wrong in the
+        process, so I re-did it all. It was all the same, up until extracting the key.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/different-key.webp" alt="Differing key capture">
+        <figcaption>Key observation on different days</figcaption>
+      </figure>
+
+      <p>
+        I was baffled. The key changed? What? How could this be? I tried everything I could while statically analyzing
+        the file, but nothing was biting. It didn't make any sense. I then moved on to dynamically analyzing it.
+      </p>
+    </section>
+
+    <!-- Dynamic Analysis -->
+    <section class="cyber-section" id="dynamic-analysis">
+      <h2>// Dynamic Analysis</h2>
+      <p>
+        I dreaded having to do this, given the fact that I would have to patch god-knows-how-many anti-debugging/VM
+        functions. But yeah, here I went. I wrote a simple dll loader in C and got to work on my Tiny10 VM. After
+        patching stuff for more time than I would like to admit, I ran the loader with a breakpoint in the
+        <code>VirtualProtect</code> section we saw earlier. The program stopped, I dumped the memory section of the
+        shellcode, all was going well.
+      </p>
+
+      <p>
+        I returned the dump file to my Kali machine, to compare against my version of the decrypted shellcode, see what
+        was the difference between them and finally see what the shellcode actually did.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/decrypted-files.webp" alt="decrypted-files">
+        <figcaption>Comparison of the decrypted files</figcaption>
+      </figure>
+
+      <p>
+        Heh… not what I was expecting. Who thought that one can be surprised by getting something right? After crashing
+        out about this, I reached out for help for the challenge organizers and they sent me a PCAP file that I promptly
+        opened in wireshark. There, I found a decryption key. I still don't know what I had to do to get to this result,
+        but I was definitely saved by this.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/wireshark.webp" alt="PCAP-key-discovery">
+        <figcaption>Real decryption key discovery</figcaption>
+      </figure>
+
+      <p>
+        Here, then, I used this key to decrypt the file and throw it in Ghidra. This, admittedly, wasn't a very
+        fortuitous idea. The very first instruction was a call to just a tiny bit after the end of the file, which is
+        <code>2914f0bffff</code>, so back to debugging we go.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/call.webp" alt="first-call-instruction">
+        <figcaption>First shellcode instruction</figcaption>
+      </figure>
+
+      <p>
+        So, I had never done this before (shoutout to CheatEngine, if I cheated more on games when younger the knowledge
+        would probably have helped me here a bit), but I had to change the content of the XOR key before it was used for
+        the decryption but after it was substituted via socket, so I chose the instruction below (the last one before
+        the decryption loop) to mark as a breakpoint.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/breakpoint.webp" alt="breakpoint-before-XOR-loop">
+        <figcaption>Breakpointing just before the XOR loop</figcaption>
+      </figure>
+
+      <p>
+        I stepped forward five times, into the <code>movzx</code> instruction, went to where <code>local498</code> is
+        stored (<code>rbp+rax+10E0</code>), changed the key into the one I received, went through the loop, into the
+        <code>call rdi</code> (<code>(* _Dst)()</code> in our decompiled code).
+      </p>
+
+      <p>
+        My initial strategy, then, was to mark a breakpoint in <code>VirtualProtect</code> and dump the memory from
+        <code>rcx</code> to <code>rcx+rdx</code> every time it happened. It happened eight times. From now on, analysis
+        gets a little crazy because of problems I had both with the debugger and with the execution of the file, but
+        more on that later.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="shellcode">
+      <h2>// The Shellcode</h2>
+      <p>
+        After analyzing the dumped files, I discovered a very interesting behaviour: even though
+        <code>VirtualProtect</code> was called eight different times, every time it was called the memory that was put
+        to execution was the same memory region, but a little bit shrunken, as the end address was the same and the
+        initial was a little forwards.
+      </p>
+
+      <p>
+        I sincerely don't know exactly why this happened, but I was happy to find out that everything I needed, for the
+        most part, was in the first dump.
+      </p>
+
+      <p>
+        With that in mind, I threw the first dump in Ghidra and started to work on it. The file itself was huge, but
+        amidst the confusion I anchored myself on the function I deemed most important: <code>FUN_000022a0</code>, as my
+        Ghidra baptized it, was a dropper/loader that had a very intricate setup.
+      </p>
+
+      <p>
+        The first thing I noticed was a sanity check that I have many reasons to think is actually an anti-debugger
+        technique, but I had no problem with it so I just left it there.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/sanity-check.webp" alt="sanity-check-magic-value">
+        <figcaption>Magic value and comparison</figcaption>
+      </figure>
+
+      <p>
+        A magic value (<code>102</code>) is written in <code>piVar6</code> (which is copied by <code>piVar9</code>) and
+        then compared to <code>350</code> (I don't really know why 350 exactly). If the value is greater than
+        <code>350</code>, the code self-destructs (as it indicates it was tampered with).
+      </p>
+
+      <p>
+        More importantly, then, the code takes its own executable's file path and copies it to a hidden windows
+        directory, <code>C:\ProgramData</code>, creating <code>ProgramData\EdgeBrower</code> (that, at first glance,
+        would seem like a legit file path to stuff related to the edge browser, the windows latest default browser).
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/programdata.webp" alt="copy-to-programData">
+        <figcaption>Copying executable and staging files</figcaption>
+      </figure>
+
+      <p>
+        Then, confusion starts kicking in.
+      </p>
+
+      <p>
+        Here, confirmed by x64dbg, the program should create, through <code>CopyFileW</code>
+        (<code>*DAT_0001dcb0</code>), three files: <strong>EdgeBrower.exe</strong> (a copy of the loader used for this
+        dll); <strong>msedge.dll</strong> (a copy of the dll); and <strong>edge_data.db</strong>. But even though when I
+        run the program up until this point it runs smoothly, only <strong>EdgeBrower.exe</strong> is actually created.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/instructions-ghidra.webp" alt="copyfilew-ghidra">
+        <figcaption>Ghidra set of instructions</figcaption>
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/instructions-x64dbg.webp" alt="copyfilew-x64dbg">
+        <figcaption>x64dbg set of instructions</figcaption>
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/edgebrower.webp" alt="edgebreower">
+        <figcaption>EdgeBrower creation</figcaption>
+      </figure>
+
+      <p>
+        Moving on, the program then sets up persistency through <code>RegSetValueExW</code> so that the dropped
+        <strong>EdgeBrower.exe</strong> is launched on system startup.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/regsetghidra.webp" alt="ghidra-registry-persistence">
+        <figcaption>Persistence via registry in Ghidra</figcaption>
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/regsetx64.webp" alt="x64dbg-registry-persistence">
+        <figcaption>Persistence via registry in x64dbg</figcaption>
+      </figure>
+
+      <p>
+        As you can see in the print of my machine below, this portion of the code actually works as intended.
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/persistance.webp" alt="evidence-of-persistence">
+        <figcaption>Persistence observed on system</figcaption>
+      </figure>
+
+      <p>
+        Then it comes the part I had nightmares about (literally)
+      </p>
+
+      <figure class="post-figure">
+        <img src="images/stage3ghidra.webp" alt="stage-3-ghidra">
+        <figcaption>Loading the stage-3 encrypted payload in ghidra</figcaption>
+      </figure>
+
+      <figure class="post-figure">
+        <img src="images/stage3x64.webp" alt="stage-3-x64">
+        <figcaption>Loading the stage-3 encrypted payload in x64dbg</figcaption>
+      </figure>
+
+      <p>
+        As we see above, <code>CreateFileW</code> is called, followed by <code>GetFileSize</code>,
+        <code>LocalAlloc</code>, <code>ReadFile</code> and <code>CloseHandle</code>: all of these deal with the real
+        stage-3 encrypted payload, as they load it into memory.
+      </p>
+
+      <p>
+        Then: <code>FUN_00001c60</code>. I will spare you the view of this monster of a function, it has already
+        consumed too much of my mind to consume yours too. To speak plainly, this is a decryptor function (a modified
+        AES-256, I think) for the payload. Sadly, I couldn't get it to work for anything in the world.
+      </p>
+
+      <p>
+        The execution of the program never makes it through this function, as it always crashes in that stage.
+        Initially, I suspected it might be a case of runtime key substitution (similar to earlier behavior), but in this
+        instance, the decryption key appears to be hardcoded. There was no evidence of a key being fetched via socket or
+        from any remote source. I suspected anti-debugger/VM techniques too, but I patched all that I could find and put
+        breakpoints on them to analyze it further, but the program never even executes those functions.
+      </p>
+
+      <p>
+        I am pretty frustrated about this as I really wanted to get to the core of the payload, but after exhausting
+        every approach I knew, I couldn't prevent the crash or decrypt the data. Still, I hope the rest of the analysis
+        has demonstrated value. Despite not fully reaching the end, the program exhibited a number of interesting
+        techniques and behaviors worth documenting.
+      </p>
+
+      <p><em>Thanks for reading. See ya.</em></p>
+    </section>
+
+    <section class="cyber-section" id="back">
+      <h2>// Back</h2>
+      <p><a class="view-all-link" href="/index.html">Main Page</a></p>
+      <p><a class="view-all-link" href="../index.html">Blog</a></p>
+    </section>
+  </main>
+</body>
+
+</html>
