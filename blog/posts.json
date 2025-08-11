@@ -1,7 +1,7 @@
 [
   {
     "slug": "psswrd-table",
-    "title": "RE — Psswrd Table",
+    "title": "Psswrd Table",
     "tag": "RE",
     "date": "2025-07-18",
     "url": "/blog/psswrd-table/",
@@ -9,7 +9,7 @@
   },
   {
     "slug": "overflowing-key",
-    "title": "RE — Overflowing Key",
+    "title": "Overflowing Key",
     "tag": "RE",
     "date": "2025-06-02",
     "url": "/blog/overflowing-key/",
@@ -17,7 +17,7 @@
   },
   {
     "slug": "cookie-export-dll",
-    "title": "RE — Cookie Export DLL",
+    "title": "Cookie Export DLL",
     "tag": "RE",
     "date": "2025-05-10",
     "url": "/blog/cookie-export-dll/",
@@ -33,50 +33,34 @@
   },
   {
     "slug": "Goedel in the machine",
-    "title": "VL — Goedel in the machine",
+    "title": "Goedel in the machine",
     "tag": "VL",
     "date": "2025-03-22",
     "url": "/blog/ghost-packets/",
     "description": "Analyzing malformed UDP traffic that evades IDS signatures."
   },
   {
-    "slug": "SCRAP FROM THIS BELOW",
-    "title": "VL — SCRAP FROM THIS BELOW",
+    "slug": "Goedel in the machine",
+    "title": "Goedel in the machine",
     "tag": "VL",
-    "date": "2025-02-14",
-    "url": "/blog/sandbox-escape-2025/",
-    "description": "From limited shell to host compromise using overlooked IPC channels."
+    "date": "2025-03-22",
+    "url": "/blog/ghost-packets/",
+    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
   },
   {
-    "slug": "debugger-dreams",
-    "title": "OP — Debugger Dreams",
-    "tag": "OP",
-    "date": "2025-01-08",
-    "url": "/blog/debugger-dreams/",
-    "description": "Why low-level debugging will always have a place in security research."
+    "slug": "Goedel in the machine",
+    "title": "Goedel in the machine",
+    "tag": "VL",
+    "date": "2025-03-22",
+    "url": "/blog/ghost-packets/",
+    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
   },
   {
-    "slug": "patch-tuesday-fatigue",
-    "title": "OP — Patch Tuesday Fatigue",
-    "tag": "OP",
-    "date": "2024-12-10",
-    "url": "/blog/patch-tuesday-fatigue/",
-    "description": "Reflections on the overwhelming pace of modern vulnerability patch cycles."
-  },
-  {
-    "slug": "reverse-bios-mysteries",
-    "title": "RE — Reverse BIOS Mysteries",
-    "tag": "RE",
-    "date": "2024-11-03",
-    "url": "/blog/reverse-bios-mysteries/",
-    "description": "Extracting and analyzing firmware images from obscure embedded boards."
-  },
-  {
-    "slug": "malware-c2-traffic-analysis",
-    "title": "RE — Malware C2 Traffic Analysis",
-    "tag": "RE",
-    "date": "2024-10-05",
-    "url": "/blog/malware-c2-traffic-analysis/",
-    "description": "Dissecting encrypted command-and-control protocols over HTTP/2."
+    "slug": "Goedel in the machine",
+    "title": "Goedel in the machine",
+    "tag": "VL",
+    "date": "2025-03-22",
+    "url": "/blog/ghost-packets/",
+    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
   }
 ]

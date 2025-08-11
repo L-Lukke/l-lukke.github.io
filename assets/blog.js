@@ -27,7 +27,7 @@ function renderList(posts, olEl) {
     .join('');
 }
 
-async function mountLatest(selector = '#latest-posts', count = 8) {
+async function mountLatest(selector = '#latest-posts', count = 6) {
   const el = document.querySelector(selector);
   if (!el) return;
   const posts = await loadPosts(count);
@@ -42,6 +42,6 @@ async function mountAll(selector = '#all-posts') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.querySelector('#latest-posts')) mountLatest('#latest-posts', 8);
+  if (document.querySelector('#latest-posts')) mountLatest('#latest-posts', 6);
   if (document.querySelector('#all-posts')) mountAll('#all-posts');
 });
