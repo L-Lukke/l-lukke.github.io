@@ -5,23 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blog • L-Lukke</title>
   <meta name="description" content="Malware Analysis • PenTesting • DFIR — posts by Lucas Lopes." />
-  <link rel="icon" href="/icon.png" />
-  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="icon" href="../icon.png" />
+  <link rel="stylesheet" href="../assets/styles.css" />
 </head>
 <body>
   <div class="matrix-grid" aria-hidden="true"></div>
   <div class="custom-cursor" aria-hidden="true"></div>
 
-  <!-- same nav -->
   <nav class="cyber-nav" aria-label="Primary">
     <div class="nav-container">
-      <a href="/#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
-      <div class="nav-links" role="menubar">
-        <a href="/#academic" class="nav-link" role="menuitem">Academic</a>
-        <a href="/#work" class="nav-link" role="menuitem">Work</a>
-        <a href="/#blog" class="nav-link" role="menuitem">Blog</a>
-        <a href="/#contact" class="nav-link" role="menuitem">Contact Me</a>
-      </div>
+      <a href="../#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
     </div>
   </nav>
 
@@ -29,14 +22,12 @@
     <section class="cyber-section revealed" id="blog">
       <h2>// Blog</h2>
       <p class="post-intro">RE - Reverse Engineering; VL - Vulnerability; OP - Opinion</p>
-      <ol class="post-list">
-        <li><a href="/blog/psswrd-table/">RE - Psswrd Table</a></li>
-        <li><a href="/blog/overflowing-key/">RE - Overflowing Key</a></li>
-        <li><a href="/blog/cookie-export-dll/">RE - Cookie Export DLL</a></li>
-      </ol>
+
+      <ol class="post-list" id="all-posts"> </ol>
     </section>
   </main>
 
-  <script src="/assets/main.js" defer></script>
+  <script src="../assets/main.js" defer></script>
+  <script src="../assets/blog.js" defer></script>
 </body>
 </html>

@@ -28,9 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
             cursor.style.top = `${e.clientY}px`;
         });
         // Swap to triangle on interactive hover
-        document.querySelectorAll('a, button, .nav-link, .contact-link').forEach(element => {
-            element.addEventListener('mouseenter', () => cursor.classList.add('triangle-cursor'));
-            element.addEventListener('mouseleave', () => cursor.classList.remove('triangle-cursor'));
+        const interactiveSel = 'a, button, .nav-link, .contact-link';
+
+        document.addEventListener('pointermove', (e) => {
+        const overInteractive = e.target.closest(interactiveSel);
+        cursor.classList.toggle('triangle-cursor', !!overInteractive);
         });
     } else {
         // Fallback: show normal cursor
