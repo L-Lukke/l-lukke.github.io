@@ -24,43 +24,19 @@
     "description": "Hooking, DLL search order, and sandboxing notes."
   },
   {
-    "slug": "the-halting-problem-will-always-win",
-    "title": "The Halting Problem Will Always Win WIP",
-    "tag": "VL",
+    "slug": "halting-problem-always-wins",
+    "title": "Halting Problem Always Wins",
+    "tag": "OP",
     "date": "2025-04-15",
-    "url": "/blog/heap-havoc/",
+    "url": "/blog/halting-problem-always-wins/",
     "description": "Exploiting custom memory allocators and bypassing bounds checks."
   },
   {
-    "slug": "Goedel in the machine",
-    "title": "Goedel in the machine",
-    "tag": "VL",
+    "slug": "goedel-in-the-machine",
+    "title": "Göedel in the Machine",
+    "tag": "OP",
     "date": "2025-03-22",
-    "url": "/blog/ghost-packets/",
-    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
-  },
-  {
-    "slug": "Goedel in the machine",
-    "title": "Goedel in the machine",
-    "tag": "VL",
-    "date": "2025-03-22",
-    "url": "/blog/ghost-packets/",
-    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
-  },
-  {
-    "slug": "Goedel in the machine",
-    "title": "Goedel in the machine",
-    "tag": "VL",
-    "date": "2025-03-22",
-    "url": "/blog/ghost-packets/",
-    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
-  },
-  {
-    "slug": "Goedel in the machine",
-    "title": "Goedel in the machine",
-    "tag": "VL",
-    "date": "2025-03-22",
-    "url": "/blog/ghost-packets/",
+    "url": "/blog/goedel-in-the-machine/",
     "description": "Analyzing malformed UDP traffic that evades IDS signatures."
   }
 ]
