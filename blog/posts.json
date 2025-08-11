@@ -4,7 +4,7 @@
     "title": "Psswrd Table",
     "tag": "RE",
     "date": "2025-07-18",
-    "url": "blog/psswrd-table/",
+    "url": "/blog/psswrd-table/",
     "description": "Reverse engineering the Psswrd Table: techniques, tools, and takeaways."
   },
   {
@@ -12,7 +12,7 @@
     "title": "Overflowing Key",
     "tag": "RE",
     "date": "2025-06-02",
-    "url": "blog/overflowing-key/",
+    "url": "/blog/overflowing-key/",
     "description": "Stack discipline, mitigations, and modern compilers."
   },
   {
@@ -20,7 +20,7 @@
     "title": "Cookie Export DLL",
     "tag": "RE",
     "date": "2025-05-10",
-    "url": "blog/cookie-export-dll/",
+    "url": "/blog/cookie-export-dll/",
     "description": "Hooking, DLL search order, and sandboxing notes."
   },
   {
@@ -28,7 +28,7 @@
     "title": "Halting Problem Always Wins",
     "tag": "OP",
     "date": "2025-04-15",
-    "url": "blog/halting-problem-always-wins/",
+    "url": "/blog/halting-problem-always-wins/",
     "description": "Exploiting custom memory allocators and bypassing bounds checks."
   },
   {
@@ -36,7 +36,7 @@
     "title": "Göedel in the Machine",
     "tag": "OP",
     "date": "2025-03-22",
-    "url": "blog/goedel-in-the-machine/",
+    "url": "/blog/goedel-in-the-machine/",
     "description": "Analyzing malformed UDP traffic that evades IDS signatures."
   }
 ]
