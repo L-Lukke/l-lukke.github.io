@@ -3,40 +3,32 @@
     "slug": "psswrd-table",
     "title": "Psswrd Table",
     "tag": "RE",
-    "date": "2025-07-18",
+    "date": "2025-05-16",
     "url": "/blog/psswrd-table/",
-    "description": "Reverse engineering the Psswrd Table: techniques, tools, and takeaways."
+    "keywords": ""
   },
   {
     "slug": "overflowing-key",
     "title": "Overflowing Key",
     "tag": "RE",
-    "date": "2025-06-02",
+    "date": "2025-05-19",
     "url": "/blog/overflowing-key/",
-    "description": "Stack discipline, mitigations, and modern compilers."
+    "keywords": ""
   },
   {
     "slug": "cookie-trafficking",
     "title": "Cookie Trafficking DLL",
     "tag": "RE",
-    "date": "2025-08-01",
+    "date": "2025-08-04",
     "url": "/blog/cookie-trafficking/",
-    "description": "Reverse engineering a suspicious DLL, from anti-analysis tricks to elusive stage-3 payloads."
-  },
-  {
-    "slug": "halting-problem-always-wins",
-    "title": "Halting Problem Always Wins",
-    "tag": "OP",
-    "date": "2025-04-15",
-    "url": "/blog/halting-problem-always-wins/",
-    "description": "Exploiting custom memory allocators and bypassing bounds checks."
+    "keywords": ""
   },
   {
     "slug": "goedel-in-the-machine",
     "title": "Göedel in the Machine",
     "tag": "OP",
-    "date": "2025-03-22",
+    "date": "2025-09-01",
     "url": "/blog/goedel-in-the-machine/",
-    "description": "Analyzing malformed UDP traffic that evades IDS signatures."
+    "keywords": ""
   }
 ]
