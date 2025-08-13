@@ -219,6 +219,18 @@ button:focus-visible {
     text-shadow: 0 0 8px rgba(255, 15, 61, .35);
 }
 
+@media (max-width: 1024px) {
+    .post-list {
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .post-list {
+        grid-template-columns: 1fr;
+    }
+}
+
 .cyber-section .view-all-link {
     margin-top: 2rem;
     display: inline-block;
@@ -234,18 +246,6 @@ button:focus-visible {
 .cyber-section .view-all-link:hover {
     border-color: rgba(255, 15, 61, .35);
     text-shadow: 0 0 8px rgba(255, 15, 61, .35);
-}
-
-@media (max-width: 1024px) {
-    .post-list {
-        grid-template-columns: repeat(2, minmax(200px, 1fr));
-    }
-}
-
-@media (max-width: 640px) {
-    .post-list {
-        grid-template-columns: 1fr;
-    }
 }
 
 h1 {
