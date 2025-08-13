@@ -1,204 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
+<html lang="en">
+    <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>L-Lukke</title>
 
-    <!-- SEO & Social -->
-    <meta name="description"
-        content="Lucas Lopes — Malware Analysis, Penetration Testing, and Digital Forensics. CS undergrad @ PUC Minas." />
-    <meta property="og:title" content="Lucas Lopes - Security Portfolio" />
+    <meta name="description" content="Lucas Lopes - Malware Analysis, Penetration Testing, and Digital Forensics. CS undergrad @ PUC Minas." />
+    <meta property="og:title" content="Lucas Lopes - Portfolio" />
     <meta property="og:description" content="Malware Analysis • PenTesting • DFIR" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0A0A0F" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="icon.png" />
 
-    <!-- Fonts (preconnect + swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
-        rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/styles.css" />
-<script src="assets/main.js" defer></script>
-<script src="assets/blog.js" defer></script>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="assets/main.js" defer></script>
+    <script src="assets/blog.js" defer></script>
+    </head>
 
-<body>
-    <div class="matrix-grid" aria-hidden="true"></div>
-    <div class="custom-cursor" aria-hidden="true"></div>
 
-    <nav class="cyber-nav" aria-label="Primary">
-        <div class="nav-container">
-            <a href="#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
-            <div class="nav-links" role="menubar">
-                <a href="#academic" class="nav-link" role="menuitem">Academic</a>
-                <a href="#work" class="nav-link" role="menuitem">Work</a>
-                <a href="#blog" class="nav-link" role="menuitem">Blog</a>
-                <a href="#contact" class="nav-link" role="menuitem">Contact Me</a>
-            </div>
-        </div>
-    </nav>
+    <body>
+        <div class="matrix-grid" aria-hidden="true"></div>
+        <div class="custom-cursor" aria-hidden="true"></div>
 
-    <div id="top" class="cyber-container">
-        <header class="cyber-header">
-            <h1>LUCAS LOPES</h1>
-            <p style="margin-top: 1.5rem; opacity: 0.8;">Malware Analysis | Penetration Testing | Digital Forensics</p>
-            <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
-                <!-- LinkedIn -->
-                <a aria-label="LinkedIn: Lucas Lopes" href="https://www.linkedin.com/in/lucas-a-lopes/" target="_blank"
-                    rel="noopener noreferrer" class="contact-link">
-                    <div class="icon-wrapper">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            aria-hidden="true">
-                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                            <rect x="2" y="9" width="4" height="12" />
-                            <circle cx="4" cy="4" r="2" />
-                        </svg>
-                    </div>
-                </a>
-                <!-- GitHub -->
-                <a aria-label="GitHub: L-Lukke" href="https://github.com/L-Lukke" target="_blank"
-                    rel="noopener noreferrer" class="contact-link">
-                    <div class="icon-wrapper">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            aria-hidden="true">
-                            <path
-                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                        </svg>
-                    </div>
-                </a>
-                <!-- Email -->
-                <a aria-label="Email: lucaslopes.cyber@gmail.com" href="mailto:lucaslopes.cyber@gmail.com"
-                    class="contact-link">
-                    <div class="icon-wrapper">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            aria-hidden="true">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                            <path d="M22 6l-10 7L2 6" />
-                        </svg>
-                    </div>
-                </a>
-            </div>
-        </header>
-
-        <section class="cyber-section" id="academic">
-            <h2>// Academic</h2>
-            <div class="grid-3d">
-                <div class="hud-card">
-                    <h3>Background</h3>
-                    <p>Computer Science undergraduate @ PUC Minas (2021-2026) with focus on data structures, computer
-                        architectures, operational systems and networks.</p>
-                    <div class="tech-stack">
-                        <span class="tech-pill">Java</span>
-                        <span class="tech-pill">C</span>
-                        <span class="tech-pill">Python</span>
-                        <span class="tech-pill">Assembly</span>
-                    </div>
-                </div>
-                <div class="hud-card">
-                    <h3>Certifications</h3>
-                    <ul>
-                        <li>CCNA: Introduction to Networks</li>
-                        <li>Cisco Endpoint Security</li>
-                        <li>CompTIA Security+ (In Progress)</li>
-                    </ul>
+        <nav class="cyber-nav" aria-label="Primary">
+            <div class="nav-container">
+                <a href="#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+                <div class="nav-links" role="menubar">
+                    <a href="#academic" class="nav-link" role="menuitem">Academic</a>
+                    <a href="#work" class="nav-link" role="menuitem">Work</a>
+                    <a href="#blog" class="nav-link" role="menuitem">Blog</a>
+                    <a href="#contact" class="nav-link" role="menuitem">Contact Me</a>
                 </div>
             </div>
-        </section>
+        </nav>
 
-        <section class="cyber-section" id="work">
-            <h2>// Work</h2>
-            <div class="grid-3d">
-                <div class="hud-card">
-                    <h3>NelCloud Solutions</h3>
-                    <p>Ticketing Manager (2022-2024)</p>
-                    <ul>
-                        <li>Managed enterprise support ticket systems</li>
-                        <li>Developed workflow automation scripts</li>
-                        <li>Managed user lifecycle in Active Directory</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="cyber-section" id="blog">
-            <h2>// Blog</h2>
-            <p class="post-intro">
-                RE - Reverse Engineering; VL - Vulnerability; OP - Opinion
-            </p>
-
-            <ol class="post-list" id="latest-posts"></ol>
-
-            <a href="blog/index.html" class="view-all-link">View all posts</a>
-        </section>
-
-        <section class="cyber-section" id="contact">
-            <h2>// Contact Me</h2>
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <a aria-label="LinkedIn: Lucas Lopes" href="https://www.linkedin.com/in/lucas-a-lopes/"
-                        target="_blank" rel="noopener noreferrer" class="contact-link">
+        <div id="top" class="cyber-container">
+            <header class="cyber-header">
+                <h1>LUCAS LOPES</h1>
+                <p style="margin-top: 1.5rem; opacity: 0.8;">Malware Analysis | Penetration Testing | Digital Forensics</p>
+                <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+                    <a aria-label="LinkedIn: Lucas Lopes" href="https://www.linkedin.com/in/lucas-a-lopes/" target="_blank"
+                        rel="noopener noreferrer" class="contact-link">
                         <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path
-                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                aria-hidden="true">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                                 <rect x="2" y="9" width="4" height="12" />
                                 <circle cx="4" cy="4" r="2" />
                             </svg>
                         </div>
-                        <div class="contact-info">
-                            <h3>LinkedIn</h3>
-                            <p>/in/lucas-a-lopes</p>
-                        </div>
                     </a>
-                </div>
-
-                <div class="contact-card">
                     <a aria-label="GitHub: L-Lukke" href="https://github.com/L-Lukke" target="_blank"
                         rel="noopener noreferrer" class="contact-link">
                         <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                aria-hidden="true">
                                 <path
                                     d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                             </svg>
                         </div>
-                        <div class="contact-info">
-                            <h3>GitHub</h3>
-                            <p>@L-Lukke</p>
-                        </div>
                     </a>
-                </div>
-
-                <div class="contact-card">
                     <a aria-label="Email: lucaslopes.cyber@gmail.com" href="mailto:lucaslopes.cyber@gmail.com"
                         class="contact-link">
                         <div class="icon-wrapper">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                aria-hidden="true">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                                 <path d="M22 6l-10 7L2 6" />
                             </svg>
                         </div>
-                        <div class="contact-info">
-                            <h3>Email</h3>
-                            <p>lucaslopes.cyber@gmail.com</p>
-                        </div>
                     </a>
                 </div>
-            </div>
-        </section>
-    </div>
-</body>
+            </header>
 
+            <section class="cyber-section" id="academic">
+                <h2>// Academic</h2>
+                <div class="grid-3d">
+                    <div class="hud-card">
+                        <h3>Background</h3>
+                        <p>Computer Science undergraduate @ PUC Minas (2021-2026) with focus on data structures, computer
+                            architectures, operational systems and networks.</p>
+                        <div class="tech-stack">
+                            <span class="tech-pill">Java</span>
+                            <span class="tech-pill">C</span>
+                            <span class="tech-pill">Python</span>
+                            <span class="tech-pill">Assembly</span>
+                        </div>
+                    </div>
+                    <div class="hud-card">
+                        <h3>Certifications</h3>
+                        <ul>
+                            <li>CCNA: Introduction to Networks</li>
+                            <li>Cisco Endpoint Security</li>
+                            <li>CompTIA Security+ (In Progress)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cyber-section" id="work">
+                <h2>// Work</h2>
+                <div class="grid-3d">
+                    <div class="hud-card">
+                        <h3>NelCloud Solutions</h3>
+                        <p>Ticketing Manager (2022-2024)</p>
+                        <ul>
+                            <li>Managed enterprise support ticket systems</li>
+                            <li>Developed workflow automation scripts</li>
+                            <li>Managed user lifecycle in Active Directory</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cyber-section" id="blog">
+                <h2>// Blog</h2>
+                <p class="post-intro">
+                    RE - Reverse Engineering; VL - Vulnerability; OP - Opinion
+                </p>
+
+                <ol class="post-list" id="latest-posts"></ol>
+
+                <a href="blog/index.html" class="view-all-link">View all posts</a>
+            </section>
+
+            <section class="cyber-section" id="contact">
+                <h2>// Contact Me</h2>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <a aria-label="LinkedIn: Lucas Lopes" href="https://www.linkedin.com/in/lucas-a-lopes/"
+                            target="_blank" rel="noopener noreferrer" class="contact-link">
+                            <div class="icon-wrapper">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" aria-hidden="true">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                    <rect x="2" y="9" width="4" height="12" />
+                                    <circle cx="4" cy="4" r="2" />
+                                </svg>
+                            </div>
+                            <div class="contact-info">
+                                <h3>LinkedIn</h3>
+                                <p>/in/lucas-a-lopes</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <a aria-label="GitHub: L-Lukke" href="https://github.com/L-Lukke" target="_blank"
+                            rel="noopener noreferrer" class="contact-link">
+                            <div class="icon-wrapper">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" aria-hidden="true">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                                </svg>
+                            </div>
+                            <div class="contact-info">
+                                <h3>GitHub</h3>
+                                <p>@L-Lukke</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <a aria-label="Email: lucaslopes.cyber@gmail.com" href="mailto:lucaslopes.cyber@gmail.com"
+                            class="contact-link">
+                            <div class="icon-wrapper">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" aria-hidden="true">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <path d="M22 6l-10 7L2 6" />
+                                </svg>
+                            </div>
+                            <div class="contact-info">
+                                <h3>Email</h3>
+                                <p>lucaslopes.cyber@gmail.com</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
 </html>

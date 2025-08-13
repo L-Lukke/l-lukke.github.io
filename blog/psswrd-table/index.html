@@ -1,221 +1,237 @@
 <!DOCTYPE html>
+
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Psswrd Table</title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Psswrd Table</title>
+    <link rel="icon" type="image/x-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="/assets/blog-post.css" />
+    <script defer src="/assets/main.js"></script>
+  </head>
 
-  <link rel="icon" type="image/x-icon" href="/icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css" />
-  <link rel="stylesheet" href="/assets/blog-post.css" />
-  <script defer src="/assets/main.js"></script>
-</head>
+  <body>
+    <div class="matrix-grid" aria-hidden="true"></div>
+    <div class="custom-cursor" aria-hidden="true"></div>
 
-<body>
-  <div class="matrix-grid" aria-hidden="true"></div>
-  <div class="custom-cursor" aria-hidden="true"></div>
-
-  <nav class="cyber-nav" aria-label="Primary">
-    <div class="nav-container">
-      <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
-      <div class="nav-links" role="menubar">
-        <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
-        <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+    <nav class="cyber-nav" aria-label="Primary">
+      <div class="nav-container">
+        <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+        <div class="nav-links" role="menubar">
+          <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
+          <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <main id="top" class="cyber-container">
-    <header class="cyber-section" id="overview">
-      <h1>Psswrd Table</h1>
-      <p class="post-meta">Tools used: Ghidra • VMware (Kali; Tiny10)</p>
-      <p class="post-intro">
-        My main goal here was to extract an exe from a compressed file and crack its password.
-      </p>
+    <main id="top" class="cyber-container">
+      <header class="cyber-section" id="overview">
+        <h1>Psswrd Table</h1>
+        <p class="post-meta">Tools used: Ghidra • VMware (Kali; Tiny10)</p>
+        <p class="post-intro">
+          My main goal here was to extract an exe from a compressed file and crack its password.
+        </p>
 
-      <nav class="post-list" aria-label="Write-up sections">
-        <ol>
-          <li><a href="#the-file">The File</a></li>
-          <li><a href="#the-compression">The Compression</a></li>
-          <li><a href="#bit-eating-dragon">Bit Eating Dragon</a></li>
-          <li><a href="#input">The Input</a></li>
-          <li><a href="#output">The Output</a></li>
-        </ol>
-      </nav>
-    </header>
+        <nav class="post-list" aria-label="Write-up sections">
+          <ol>
+            <li><a href="#the-file">The File</a></li>
+            <li><a href="#the-compression">The Compression</a></li>
+            <li><a href="#bit-eating-dragon">Bit Eating Dragon</a></li>
+            <li><a href="#input">The Input</a></li>
+            <li><a href="#output">The Output</a></li>
+          </ol>
+        </nav>
+      </header>
 
-    <section class="cyber-section" id="the-file">
-      <h2>// The File</h2>
-      <p>
-        After preparing my workstation and tools, I started to look into it. The file had no extension, so to know what
-        I was dealing with I ran "file" command.
-      </p>
+      <section class="cyber-section" id="the-file">
+        <h2>// The File</h2>
+        <p>
+          After preparing my workstation and tools, I started to look into it. The file had no extension, so to know what
+          I was dealing with I ran "file" command.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/file.webp" alt="file-output-screenshot">
-        <figcaption>File command</figcaption>
-      </figure>
-    </section>
+        <figure class="post-figure">
+          <img src="images/file.webp" alt="file-output-screenshot">
+          <figcaption>File command</figcaption>
+        </figure>
+      </section>
 
-    <section class="cyber-section" id="the-compression">
-      <h2>// The Compression</h2>
-      <p>
-        ACE isn't exactly the file format I'm most familiar with, so I transformed it to .zip and decompressed it
-        normally using 7z. (In another challenge, I stumbled upon PeaZip; shoutout to them - if only I had discovered
-        it earlier, it would've made handling the ACE files much easier.)
-      </p>
-    </section>
+      <section class="cyber-section" id="the-compression">
+        <h2>// The Compression</h2>
+        <p>
+          ACE isn't exactly the file format I'm most familiar with, so I transformed it to .zip and decompressed it
+          normally using 7z. (In another challenge, I stumbled upon PeaZip; shoutout to them - if only I had discovered
+          it earlier, it would've made handling the ACE files much easier.)
+        </p>
+      </section>
 
-    <section class="cyber-section" id="bit-eating-dragon">
-      <h2>// The Bit Eating Dragon</h2>
-      <p>
-        After extracting the archive, I found a PE file inside. Before anything, I ran it through Any.Run to be cautious
-        (be safe out there, lots of cheeky pieces of malware in the wild). A password prompt popped up, and that's when
-        I realized: the password was the flag.
-      </p>
-      <p>
-        I transferred the executable to Kali and opened Ghidra to take a look under the hood.
-      </p>
-      <p>
-        After poking around for a bit, I found what I believe to be the program's main function, as shown below (Before
-        continuing, I want to point out how important re-labeling the key pieces of code is, as I spent about 20 minutes
-        doing this and it easily saved me 3+ hours of boring back-and-forth work):
-      </p>
+      <section class="cyber-section" id="bit-eating-dragon">
+        <h2>// The Bit Eating Dragon</h2>
+        <p>
+          After extracting the archive, I found a PE file inside. Before anything, I ran it through Any.Run to be cautious
+          (be safe out there, lots of cheeky pieces of malware in the wild). A password prompt popped up, and that's when
+          I realized: the password was the flag.
+        </p>
+        <p>
+          I transferred the executable to Kali and opened Ghidra to take a look under the hood.
+        </p>
+        <p>
+          After poking around for a bit, I found what I believe to be the program's main function, as shown below (Before
+          continuing, I want to point out how important re-labeling the key pieces of code is, as I spent about 20 minutes
+          doing this and it easily saved me 3+ hours of boring back-and-forth work):
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/main.webp" alt="main">
-        <figcaption>
-          <nav class="post-list" aria-label="Write-up sections">
-            <ol>
-              <li>Code prints a request for password to the user;</li>
-              <li>User inputs password;</li>
-              <li>Code validates the input;</li>
-              <li>Password is translated to something else;</li>
-            </ol>
-          </nav>
-        </figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/main.webp" alt="main">
+          <figcaption>
+            <nav class="post-list" aria-label="Write-up sections">
+              <ol>
+                <li>Code prints a request for password to the user;</li>
+                <li>User inputs password;</li>
+                <li>Code validates the input;</li>
+                <li>Password is translated to something else;</li>
+              </ol>
+            </nav>
+          </figcaption>
+        </figure>
 
-      <p>
-        Two important pieces of information can be extracted from this image alone: the length of the password is 10 and
-        the password is made up of digits only. This is sufficient to, for example, make brute forcing the password in
-        an offline scenario (like this one) a viable option. But we need to go further.
-      </p>
+        <p>
+          Two important pieces of information can be extracted from this image alone: the length of the password is 10 and
+          the password is made up of digits only. This is sufficient to, for example, make brute forcing the password in
+          an offline scenario (like this one) a viable option. But we need to go further.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/main2.webp" alt="main2">
-      </figure>
+        <figure class="post-figure">
+          <img src="images/main2.webp" alt="main2">
+        </figure>
 
-      <p>
-        This is the rest of the main. Most of here is standard: print confirmation/rejection, a boolean
-        to control the flux of the code, etc; but there's one thing that's very important here: the
-        location of the password! The variable pcVar3 is compared against the user's input to
-        validate or reject it. Problem solved, right? Wrong. It is, indeed, a very important piece of
-        information, but if you've been following along, you've likely realized: the password is
-        translated before being checked, so knowing the password per se is not the definitive
-        solution for the problem, we actually need to investigate what input (or, in that case, as we
-        will see, inputs) will cause our typed password to be equal to the translated password.
-        Luckily, I labeled the variables up there, so I know exactly what is happening with each typed
-        input!
-      </p>
+        <p>
+          This is the rest of the main. Most of here is standard: print confirmation/rejection, a boolean
+          to control the flux of the code, etc; but there's one thing that's very important here: the
+          location of the password! The variable pcVar3 is compared against the user's input to
+          validate or reject it. Problem solved, right? Wrong. It is, indeed, a very important piece of
+          information, but if you've been following along, you've likely realized: the password is
+          translated before being checked, so knowing the password per se is not the definitive
+          solution for the problem, we actually need to investigate what input (or, in that case, as we
+          will see, inputs) will cause our typed password to be equal to the translated password.
+          Luckily, I labeled the variables up there, so I know exactly what is happening with each typed
+          input!
+        </p>
 
-    </section>
+      </section>
 
-    <section class="cyber-section" id="input">
-      <h2>// The Input</h2>
-      <p>
-        As we saw, each digit of the input is transformed via a pointer table to another. This is kind of
-        a difficult part to explain, but I'll do my best:
-      </p>
+      <section class="cyber-section" id="input">
+        <h2>// The Input</h2>
+        <p>
+          As we saw, each digit of the input is transformed via a pointer table to another. This is kind of
+          a difficult part to explain, but I'll do my best:
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/translation.webp" alt="digit-translation">
-        <figcaption>Digit Translation</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/translation.webp" alt="digit-translation">
+          <figcaption>Digit Translation</figcaption>
+        </figure>
 
-      <p>
-        Each valid input passes through a transformation that involves taking a base pointer, moving
-        it by digit * 2 bytes down and taking that integer value as their value. The following image will
-        clarify the structure for those who are still confused by the logic (an important reminder is
-        that 30h, in hex, is the decimal 0, so 31h is 1, 32h is 2; etc).
-      </p>
+        <p>
+          Each valid input passes through a transformation that involves taking a base pointer, moving
+          it by digit * 2 bytes down and taking that integer value as their value. The following image will
+          clarify the structure for those who are still confused by the logic (an important reminder is
+          that 30h, in hex, is the decimal 0, so 31h is 1, 32h is 2; etc).
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/address-table.webp" alt="address-table">
-        <figcaption>Pointer Table</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/address-table.webp" alt="address-table">
+          <figcaption>Pointer Table</figcaption>
+        </figure>
 
-      <p>
-        Here, I tweaked Ghidra to show the contents exactly as they are accessed. For example, if
-        typedDigit was 0, the translatedDigit would point to the memory location 004208b4. This
-        location itself is a pointer to the address e0 08 42 00, or 0x004208e8, which contains the
-        value 30h (or decimal 0). So, 0 translates to 0.
-      </p>
+        <p>
+          Here, I tweaked Ghidra to show the contents exactly as they are accessed. For example, if
+          typedDigit was 0, the translatedDigit would point to the memory location 004208b4. This
+          location itself is a pointer to the address e0 08 42 00, or 0x004208e8, which contains the
+          value 30h (or decimal 0). So, 0 translates to 0.
+        </p>
 
-      <p>
-        Now, if typedDigit was 1, the translatedDigit would point to 0x004208bc (i.e., 2 integers
-        (returning to our transformation function, 1*2) or 8 bytes later). This location itself points to
-        the address c8 08 42 00, or 0x004208c8, which holds the value 36h (decimal 6). So, 1
-        translates to 6.
-      </p>
-    </section>
+        <p>
+          Now, if typedDigit was 1, the translatedDigit would point to 0x004208bc (i.e., 2 integers
+          (returning to our transformation function, 1*2) or 8 bytes later). This location itself points to
+          the address c8 08 42 00, or 0x004208c8, which holds the value 36h (decimal 6). So, 1
+          translates to 6.
+        </p>
+      </section>
 
-    <section class="cyber-section" id="output">
-      <h2>// The Output</h2>
-      <p>
-        Now, what's left for us to do is to translate the password. Easy Squeezy. Earlier, I wrote
-        about having the address for the translated password, and here it is:
-      </p>
+      <section class="cyber-section" id="output">
+        <h2>// The Output</h2>
+        <p>
+          Now, what's left for us to do is to translate the password. Easy Squeezy. Earlier, I wrote
+          about having the address for the translated password, and here it is:
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/password.webp" alt="password">
-        <figcaption>Hardcoded Password</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/password.webp" alt="password">
+          <figcaption>Hardcoded Password</figcaption>
+        </figure>
 
-      <p>
-        I would like to advise the readers about one small detail that I encountered in this part:
-        Ghidra doesn't always divide everything perfectly when partitioning the data, as it divided the
-        password in two because of different code references to different parts of the data, so watch
-        out for this.
-      </p>
+        <p>
+          I would like to advise the readers about one small detail that I encountered in this part:
+          Ghidra doesn't always divide everything perfectly when partitioning the data, as it divided the
+          password in two because of different code references to different parts of the data, so watch
+          out for this.
+        </p>
 
-      <p>
-        "0842378000" → [0x30, 0x38, 0x34, 0x32, 0x33, 0x37, 0x38, 0x30, 0x30, 0x30]
-      </p>
+        <p>
+          "0842378000" → [0x30, 0x38, 0x34, 0x32, 0x33, 0x37, 0x38, 0x30, 0x30, 0x30]
+        </p>
 
-      <p>
-        Now, to actually get the password, you have to reverse-translate it. What some of you may
-        have noted is that there are multiple password combinations to the correct password, since
-        some digits, like 3, 8, and 9, all translate to 0x38 (or decimal 8).
-      </p>
+        <p>
+          Now, to actually get the password, you have to reverse-translate it. What some of you may
+          have noted is that there are multiple password combinations to the correct password, since
+          some digits, like 3, 8, and 9, all translate to 0x38 (or decimal 8).
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/password-combinations.webp" alt="password-combinations">
-        <figcaption>"Parabens, a senha esta correta!" translates to "Congratulations, the password is correct!"
-        </figcaption>
-        <figcaption>Some password combinations</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/password-combinations.webp" alt="password-combinations">
+          <figcaption>"Parabens, a senha esta correta!" translates to "Congratulations, the password is correct!"
+          </figcaption>
+          <figcaption>Some password combinations</figcaption>
+        </figure>
 
-      <p>
-        Here I displayed some of the combinations, but there are many more to try if you inspect the
-        table closely.
-      </p>
+        <p>
+          Here I displayed some of the combinations, but there are many more to try if you inspect the
+          table closely.
+        </p>
 
-      <p><em>Thanks for reading. See ya.</em></p>
-    </section>
+        <p><em>Thanks for reading. See ya.</em></p>
+      </section>
 
-    <section class="cyber-section" id="back">
-      <h2>// Back</h2>
-      <p><a class="view-all-link" href="/index.html">Main Page</a></p>
-      <p><a class="view-all-link" href="../index.html">Blog</a></p>
-    </section>
-  </main>
-</body>
-
+      <section class="cyber-section" id="back">
+        <h2>// Back</h2>
+        <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+          <a aria-label="to-blog" href="../index.html" class="contact-link">
+            <div class="icon-wrapper">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="contact-text">To Blog</span>
+          </a>
+          <a aria-label="to-main-page" href="/index.html" class="contact-link">
+            <div class="icon-wrapper">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path d="M13 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="contact-text">To Main Page</span>
+          </a>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

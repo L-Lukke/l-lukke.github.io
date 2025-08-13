@@ -1,144 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Overflowing Key</title>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Overflowing Key</title>
 
-  <link rel="icon" type="image/x-icon" href="/icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css" />
-  <link rel="stylesheet" href="/assets/blog-post.css" />
-  <script defer src="/assets/main.js"></script>
-</head>
+    <link rel="icon" type="image/x-icon" href="/icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="/assets/blog-post.css" />
+    <script defer src="/assets/main.js"></script>
+  </head>
 
-<body>
-  <div class="matrix-grid" aria-hidden="true"></div>
-  <div class="custom-cursor" aria-hidden="true"></div>
+  <body>
+    <div class="matrix-grid" aria-hidden="true"></div>
+    <div class="custom-cursor" aria-hidden="true"></div>
 
-  <nav class="cyber-nav" aria-label="Primary">
-    <div class="nav-container">
-      <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
-      <div class="nav-links" role="menubar">
-        <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
-        <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+    <nav class="cyber-nav" aria-label="Primary">
+      <div class="nav-container">
+        <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+        <div class="nav-links" role="menubar">
+          <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
+          <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <main id="top" class="cyber-container">
-    <header class="cyber-section" id="overview">
-      <h1>Overflowing Key</h1>
-      <p class="post-meta">Tools used: DLL • Ghidra • OllyDbg • VMware (Kali; Tiny10)</p>
-      <p class="post-intro">
-        My main goal here was to decompress a file and generate a valid keyfile for it.
-      </p>
+    <main id="top" class="cyber-container">
+      <header class="cyber-section" id="overview">
+        <h1>Overflowing Key</h1>
+        <p class="post-meta">Tools used: DLL • Ghidra • OllyDbg • VMware (Kali; Tiny10)</p>
+        <p class="post-intro">
+          My main goal here was to decompress a file and generate a valid keyfile for it.
+        </p>
 
-      <nav class="post-list" aria-label="Write-up sections">
-        <ol>
-          <li><a href="#kgb">KGB2?</a></li>
-          <li><a href="#ghidra">The Bit Eating Dragon</a></li>
-          <li><a href="#testing">Testing</a></li>
-          <li><a href="#crack">The Crack</a></li>
-        </ol>
-      </nav>
-    </header>
+        <nav class="post-list" aria-label="Write-up sections">
+          <ol>
+            <li><a href="#kgb">KGB2?</a></li>
+            <li><a href="#ghidra">The Bit Eating Dragon</a></li>
+            <li><a href="#testing">Testing</a></li>
+            <li><a href="#crack">The Crack</a></li>
+          </ol>
+        </nav>
+      </header>
 
-    <section class="cyber-section" id="#kgb">
-      <h2>// KGB2?</h2>
-      <p>
-        The file that I started with had no extention (.zip; .exe; etc) and the 'file' command yielded no result, so I
-        decided to run a quick header check to see if something popped up.
-      </p>
+      <section class="cyber-section" id="#kgb">
+        <h2>// KGB2?</h2>
+        <p>
+          The file that I started with had no extention (.zip; .exe; etc) and the 'file' command yielded no result, so I
+          decided to run a quick header check to see if something popped up.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/header-check.webp" alt="header-check">
-        <figcaption>“KGB2” and “Desafio2.exe” (Challenge2.exe, in portuguese) popped up</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/header-check.webp" alt="header-check">
+          <figcaption>“KGB2” and “Desafio2.exe” (Challenge2.exe, in portuguese) popped up</figcaption>
+        </figure>
 
-      <p>
-        You may be wondering: “what the **** is KGB2?”. Fear not, for I have the answer: KGB Archiver is a file
-        compression system that was released shortly after I was born and, despite its awesome compression rate, it was
-        sadly discontinued due to taking too long to (de)compress files. I dug up some ancient artifacts to find a
-        reliable download
-        of the original archiver to be able to extract the “Desafio2.exe” file.
-      </p>
-    </section>
+        <p>
+          You may be wondering: “what the **** is KGB2?”. Fear not, for I have the answer: KGB Archiver is a file
+          compression system that was released shortly after I was born and, despite its awesome compression rate, it was
+          sadly discontinued due to taking too long to (de)compress files. I dug up some ancient artifacts to find a
+          reliable download
+          of the original archiver to be able to extract the “Desafio2.exe” file.
+        </p>
+      </section>
 
-    <section class="cyber-section" id="#ghidra">
-      <h2>// The Bit Eating Dragon</h2>
-      <p>
-        After throwing the now decompressed file in Ghidra, I rapidly found out that the program needed a keyfile to
-        return the acceptance answer. And as for the key itself it was… there. Without obfuscation, without masking;
-        nothing.
-      </p>
+      <section class="cyber-section" id="#ghidra">
+        <h2>// The Bit Eating Dragon</h2>
+        <p>
+          After throwing the now decompressed file in Ghidra, I rapidly found out that the program needed a keyfile to
+          return the acceptance answer. And as for the key itself it was… there. Without obfuscation, without masking;
+          nothing.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/main.webp" alt="main">
-        <figcaption><code>"Parabens, keyfile correto!"</code> means "Congratulations, correct keyfile!"</figcaption>
-        <figcaption><code>"Keyfile invalido, tente novamente..."</code> means "Invalid keyfile, try again..."
-        </figcaption>
-      </figure>
-    </section>
+        <figure class="post-figure">
+          <img src="images/main.webp" alt="main">
+          <figcaption><code>"Parabens, keyfile correto!"</code> means "Congratulations, correct keyfile!"</figcaption>
+          <figcaption><code>"Keyfile invalido, tente novamente..."</code> means "Invalid keyfile, try again..."
+          </figcaption>
+        </figure>
+      </section>
 
-    <section class="cyber-section" id="#testing">
-      <h2>// Testing</h2>
-      <p>
-        It seemed obvious, I would just have to create the keyfile with a string that was equal to the one that the
-        program compares it to. So I got to it. The file was created, checked and double checked for string equality, no
-        line breaks, nothing. It was perfect.
-      </p>
+      <section class="cyber-section" id="#testing">
+        <h2>// Testing</h2>
+        <p>
+          It seemed obvious, I would just have to create the keyfile with a string that was equal to the one that the
+          program compares it to. So I got to it. The file was created, checked and double checked for string equality, no
+          line breaks, nothing. It was perfect.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/crash.webp" alt="crash">
-        <figcaption>The program crashed. Absolutely no output whatsoever</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/crash.webp" alt="crash">
+          <figcaption>The program crashed. Absolutely no output whatsoever</figcaption>
+        </figure>
 
-      <p>
-        I knew something was wrong from the start, so this result hardly surprised me and only further confirmed my
-        suspicion. It wasn't long into my testing that I realized that the program crashed for large strings and
-        returned the rejection message for short ones. The problem was, probably, a buffer overflow. Returning to my
-        good bit-eating-dragon friend, I found out exactly what was happening.
-      </p>
+        <p>
+          I knew something was wrong from the start, so this result hardly surprised me and only further confirmed my
+          suspicion. It wasn't long into my testing that I realized that the program crashed for large strings and
+          returned the rejection message for short ones. The problem was, probably, a buffer overflow. Returning to my
+          good bit-eating-dragon friend, I found out exactly what was happening.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/function.webp" alt="input-function">
-        <figcaption>Read keyfile function</figcaption>
-      </figure>
-      <p>
-        Then, it was a matter of reading: the variable local_10 supported only 8 bytes, but fgets is trying to read up
-        to 256 bytes. No way I could input the keyfile through there; it would be like trying to pass a camel through
-        the eye of a needle.
-      </p>
-    </section>
+        <figure class="post-figure">
+          <img src="images/function.webp" alt="input-function">
+          <figcaption>Read keyfile function</figcaption>
+        </figure>
+        <p>
+          Then, it was a matter of reading: the variable local_10 supported only 8 bytes, but fgets is trying to read up
+          to 256 bytes. No way I could input the keyfile through there; it would be like trying to pass a camel through
+          the eye of a needle.
+        </p>
+      </section>
 
-    <section class="cyber-section" id="#crack">
-      <h2>// The Crack</h2>
-      <p>
-        Finally, it was then just a matter of finding the right address to jump to. I found the function that printed
-        the success message, but jumping directly to it caused it to print memory garbage. So I tried one instruction
-        above, when it pushes the right message into the stack, at 0x004010ef.
-      </p>
+      <section class="cyber-section" id="#crack">
+        <h2>// The Crack</h2>
+        <p>
+          Finally, it was then just a matter of finding the right address to jump to. I found the function that printed
+          the success message, but jumping directly to it caused it to print memory garbage. So I tried one instruction
+          above, when it pushes the right message into the stack, at 0x004010ef.
+        </p>
 
-      <figure class="post-figure">
-        <img src="images/solution.webp" alt="cracked-keyfile">
-        <figcaption>Cracked keyfile reading</figcaption>
-      </figure>
+        <figure class="post-figure">
+          <img src="images/solution.webp" alt="cracked-keyfile">
+          <figcaption>Cracked keyfile reading</figcaption>
+        </figure>
 
-      <p><em>Thanks for reading. See ya.</em></p>
-    </section>
+        <p><em>Thanks for reading. See ya.</em></p>
+      </section>
 
-    <section class="cyber-section" id="back">
-      <h2>// Back</h2>
-      <p><a class="view-all-link" href="/index.html">Main Page</a></p>
-      <p><a class="view-all-link" href="../index.html">Blog</a></p>
-    </section>
-  </main>
-</body>
-
+      <section class="cyber-section" id="back">
+        <h2>// Back</h2>
+        <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+          <a aria-label="to-blog" href="../index.html" class="contact-link">
+            <div class="icon-wrapper">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="contact-text">To Blog</span>
+          </a>
+          <a aria-label="to-main-page" href="/index.html" class="contact-link">
+            <div class="icon-wrapper">
+              <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path d="M13 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="contact-text">To Main Page</span>
+          </a>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>
