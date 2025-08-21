@@ -1,14 +1,3 @@
-.sidenote {
-  float: right;
-  width: 30%;
-  font-size: 0.85em;
-  color: #666;
-  margin: 0 0 1em 1em;
-  background: #f9f9f9;
-  padding: 0.5em;
-  border-left: 3px solid #ccc;
-}
-
 .post-meta {
   opacity: .75;
   margin-top: .5rem;

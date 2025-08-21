@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:title" content="Virus vs. Virus" />
+  <meta property="og:description" content="What does biological viruses have to do with computer virus? Is virus a synonym for malware? An analysis." />
+  <meta property="og:image" content="https://l-lukke.github.io/blog/virus-vs-virus/preview/creeper.webp" />
+  <meta property="og:url" content="https://l-lukke.github.io/blog/virus-vs-virus/" />
+  <meta property="og:type" content="article" />
+  <meta name="author" content="Lucas Abreu Lopes">
+
+  <title>Virus vs. Virus</title>
+
+  <link rel="icon" type="image/x-icon" href="/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/blog-post.css" />
+  <script defer src="/assets/main.js"></script>
+</head>
+
+<style>
+  .in-text-link {
+    color: var(--neon-red);
+    text-decoration: none;
+    position: relative;
+    padding: .5rem 0;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1)
+  }
+
+  .in-text-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--neon-red);
+    transition: width .15s ease
+  }
+
+  .in-text-link:hover::after {
+    width: 100%
+  }
+</style>
+
+<body>
+  <div class="matrix-grid" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+
+  <nav class="cyber-nav" aria-label="Primary">
+    <div class="nav-container">
+      <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+      <div class="nav-links" role="menubar">
+        <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
+        <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="cyber-container">
+    <header class="cyber-section" id="overview">
+      <h1>Virus vs. Virus</h1>
+      <p class="post-meta">Topics: Types of Malware | Viruses</p>
+      <p class="post-meta">Date: 21/08/2025</p>
+      <p class="post-intro">
+        We call them viruses, but not every piece of malicious code is a virus; just as not every illness is viral. The
+        term has become shorthand for all malware, which obscures both biology and computer science. This post explores
+        the similarities between natural and computer viruses, highlights the differences, and explains why
+        the virus metaphor works (and where it fails).
+      </p>
+
+      <nav class="post-list" aria-label="Write-up sections">
+        <ol>
+          <li><a href="#metaphor">The Metaphor</a></li>
+          <li><a href="#virus-vs-malware">Virus vs. Malware</a></li>
+          <li><a href="#differences">The Differences</a></li>
+          <li><a href="#how-virus-works">How Computer Viruses Really Work</a></li>
+          <li><a href="#lessons">Lessons From Biology</a></li>
+          <li><a href="#metaphor-ends">Where the Metaphor Ends</a></li>
+          <li><a href="#final">Final Thoughts</a></li>
+        </ol>
+      </nav>
+    </header>
+
+    <section class="cyber-section" id="metaphor">
+      <h2>// The Metaphor</h2>
+      <p>
+        Both biological and computer viruses are parasitic replicators. A biological virus has no metabolism of its own;
+        it survives by entering a living cell and hijacking its molecular machinery to copy itself. A computer virus
+        behaves in much the same way, attaching to a host file or boot record and reproducing whenever that host is
+        executed.
+      </p>
+
+      <p>
+        This resemblance was visible from the very beginning. The first recognized computer virus, <strong>Creeper
+          (1971)</strong>, spread across <strong>ARPANET</strong> by copying itself from machine to machine, playfully
+        displaying the message <em>"I'm the Creeper: catch me if you can."</em> It was soon followed by
+        <strong>Reaper</strong>,
+        the first antivirus, written to remove Creeper. The metaphor of <em>"infection"</em> was irresistible: code was
+        acting
+        like a pathogen, spreading in ways that strongly resembled biological viruses.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="virus-vs-malware">
+      <h2>// Virus vs. Malware</h2>
+      <p>
+        In cybersecurity, <em>"virus"</em> does not mean the same thing as <em>"malware"</em>. Malware is the umbrella
+        term: any malicious software designed to cause harm, disruption, or unauthorized access. Viruses are a specific
+        kind within that family; much like a viral infection is just a specific kind within the family of illness. What
+        makes them distinct is the method of self-replication. They insert themselves into host files or boot records
+        and spread only when those infected hosts are executed.
+      </p>
+
+      <p>
+        That is not how all malware behaves. Worms spread without needing host files, jumping across networks on their
+        own. Trojans pose as legitimate software and wait for the user to install and execute them (metaphorically
+        comparable with a carnivorous plant, waiting for an insect to pollinate it and then eating it). Ransomware holds
+        data hostage. Spyware hides quietly in the system to collect information and report back to a beacon.
+      </p>
+
+      <p>
+        <strong>Brain (1986)</strong>, often cited as the first PC virus <em>"in the wild"</em>, spread via floppy disks
+        by
+        infecting boot sectors. Compare that to <strong>ILOVEYOU (2000)</strong>, which was not a virus but a worm: it
+        spread independently through email without needing a host file. Yet because viruses were among the earliest and
+        most visible threats, their name became shorthand for all malicious code; much as <em>"flu"</em> became a
+        catch-all term
+        for colds, fevers, and respiratory infections in casual speech.
+      </p>
+
+      <p>
+        In a nutshell, computer viruses are to malware as the viral infections are to diseases.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="differences">
+      <h2>// The Differences</h2>
+      <p>
+        The metaphor also breaks down in important ways. Biological viruses are products of evolution: they emerge from
+        mutation and selection, not design. Computer viruses are engineered, often deliberately crafted as experiments,
+        pranks, or weapons. Even polymorphic malware that mutates its code is still ultimately constrained by human
+        intent.
+      </p>
+
+      <p>
+        The vectors differ as well. Biology uses air, blood, surfaces, and vectors like mosquitoes. Computing uses
+        infected files, removable media, network protocols, and user actions like clicking a malicious attachment. Both
+        rely on transmission pathways, but their environments could not be more different.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="how-virus-works">
+      <h2>// How Computer Viruses Really Work</h2>
+
+      <p>
+        The life cycle of a computer virus is simple. First, it embeds itself into a legitimate host file
+        or boot sector. Next, when the host runs, the virus executes too, spreading by copying itself into new files.
+        Finally, it may unleash a payload, which can range from a harmless prank to destructive file corruption or data
+        theft.
+      </p>
+
+      <p>
+        As antivirus tools improved, viruses became stealthier. Some used polymorphism, mutating their code each time
+        they replicated to evade signature detection. Others became metamorphic, rewriting their own logic while
+        preserving function. Some delayed their activity until a specific date (a notorious example being the
+        <strong>Michelangelo virus (1992)</strong>), which activated on the author's birthday and threatened to destroy
+        data worldwide (in reality, it caused way less damage than feared, but the panic cemented the virus metaphor in
+        the public imagination).
+      </p>
+    </section>
+
+    <section class="cyber-section" id="lessons">
+      <h2>// Lessons From Biology</h2>
+
+      <p>
+        Despite the differences, biology still provides useful lessons. Patching software is akin to vaccination: it
+        closes a pathway before infection can take hold. Quarantine in computing (sandboxing or network isolation)
+        mirrors
+        the biological principle of containing the infected before they can spread. Even the idea of herd immunity has a
+        digital equivalent in network hygiene: when most machines are patched, epidemics are less likely.
+      </p>
+
+      <p>
+        The parallel also encompasses the arms race. Just as pathogens evolve under immune pressure, malware evolves
+        under
+        defensive pressure. Each new defensive measure provides a fitness test for the adversary. The battle is ongoing,
+        never final (if you are interested in why the battle with malware fundamentally can never be final, I recommend
+        reading the <a href="../godel-in-the-machine/index.html" class="in-text-link">Göedel in the Machine</a> piece).
+      </p>
+
+      <p>
+        But here's the critical point: modern malware rarely spreads this way anymore. Network worms, Trojans, and
+        ransomware dominate real-world attacks — viruses are now more historical than practical. Which makes the
+        metaphor to biology even more poetic: the computer virus, like many natural ones, has been largely displaced by
+        faster-spreading strains.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="metaphor-ends">
+      <h2>// Where the Metaphor Ends</h2>
+
+      <p>
+        Unlike nature, digital viruses don't <em>"emerge"</em> without human intent. Treating viruses (or malware in
+        general) as we treat mindless biological agents risks naturalizing what is most of the time ultimately human
+        aggression expressed in code. Worms don't spread because of some biological need to do it, they spread because
+        someone wrote them to do so. Defenses must address not just the artifact (malware) but also understand (and 
+        occasionally bring accountable) its author.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="final">
+      <h2>// Final Thoughts</h2>
+
+      <p>
+        All viruses are malware, but not all malware are viruses. The metaphor to biology is helpful for understanding
+        replication and spread, but it can mislead if taken too literally. In today's landscape, worms, Trojans, and
+        especially ransomware dominate, yet the word virus endures because replication was the first great fear in
+        cybersecurity. Biology still offers a vivid analogy, but computer science has evolved far beyond the coinage of
+        the term. What remains most important is the presence of intent: biological viruses emerge blindly, but digital
+        ones are written with purpose.
+      </p>
+
+      <p>
+        Both kinds of virus exploit hosts to survive, but only one is a product of human design. To defend against
+        malware, we must think not only like biologists studying pathogens but also like strategists anticipating
+        adversaries.
+      </p>
+
+      <p><em>Thanks for reading. See ya.</em></p>
+    </section>
+
+    <section class="cyber-section" id="back">
+      <h2>// Back</h2>
+      <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+        <a aria-label="to-blog" href="../index.html" class="contact-link">
+          <div class="icon-wrapper">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="contact-text">To Blog</span>
+        </a>
+        <a aria-label="to-main-page" href="/index.html" class="contact-link">
+          <div class="icon-wrapper">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              aria-hidden="true">
+              <path d="M13 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M19 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="contact-text">To Main Page</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
