@@ -41,7 +41,7 @@
     <main id="top" class="cyber-container">
       <header class="cyber-section" id="overview">
         <h1>Gödel in the Machine</h1>
-        <p class="post-meta">Topics: Theoretical Limits of Security | Undecidability | Cybersecurity Philosophy</p>
+        <p class="post-meta">Topics: Theoretical Limits of Security • Undecidability • Cybersecurity Philosophy</p>
         <p class="post-meta">Date: 14/08/2025</p>
         <p class="post-intro">
           What do 1930s mathematical theorems reveal about modern cybersecurity? This post explores how Gödel's
@@ -49,7 +49,7 @@
           changes how we approach security.
         </p>
 
-        <nav class="post-list" aria-label="Write-up sections">
+        <nav class="post-list">
           <ol>
             <li><a href="#background">Background</a></li>
             <li><a href="#halting">From Halting to Malware Detection</a></li>
@@ -99,14 +99,14 @@
         <h3>Diagonalization Proof</h3>
         <pre><code class="language-python">
           def ParadoxProgram(program):
-              if PerfectAntimalware(program) == "SAFE":
-                  # Act maliciously if deemed safe
-                  malicious_action()
-                  return MALICIOUS
-              else:
-                  # Behave benignly if flagged as malicious
-                  benign_action()
-                  return SAFE
+            if PerfectAntimalware(program) == "SAFE":
+              # Act maliciously if deemed safe
+              malicious_action()
+              return MALICIOUS
+            else:
+              # Behave benignly if flagged as malicious
+              benign_action()
+              return SAFE
         </code></pre>
 
         <p>What happens when we run <code>ParadoxProgram(ParadoxProgram)</code>? Contradiction.</p>
@@ -114,12 +114,12 @@
         <h3>Reduction to Halting Problem</h3>
         <pre><code class="language-python">
           def HaltingOracle(program, input):
-              def Wrapper():
-                  program(input)
-                  malicious_action()
-                  
-              # If PerfectAntimalware() detects the malicious payload, program(input) must halt (else payload wouldn't execute)
-              return (PerfectAntimalware(Wrapper) == "MALICIOUS")
+            def Wrapper():
+              program(input)
+              malicious_action()
+              
+            # If PerfectAntimalware() detects the malicious payload, program(input) must halt (else payload wouldn't execute)
+            return (PerfectAntimalware(Wrapper) == "MALICIOUS")
         </code></pre>
 
         <p>This creates a perfect halting oracle; impossible by Turing's proof.</p>

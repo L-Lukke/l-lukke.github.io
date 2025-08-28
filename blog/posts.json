@@ -38,5 +38,13 @@
     "date": "2025-08-21",
     "url": "/blog/virus-vs-virus/",
     "keywords": ""
-  }  
+  },
+  {
+    "slug": "the-mechanical-maestro",
+    "title": "Kernel: the Mechanical Maestro (Dirty COW)",
+    "tag": "VL",
+    "date": "2025-08-28",
+    "url": "/blog/the-mechanical-maestro/",
+    "keywords": ""
+  }
 ]

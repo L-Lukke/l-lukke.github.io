@@ -47,3 +47,24 @@
   opacity: .75;
   margin-top: .5rem;
 }
+
+.blog-list {
+  counter-reset: post;
+}
+
+.blog-list li {
+  position: relative;
+  padding-left: 3ch;
+  white-space: normal;
+  overflow: hidden;
+}
+
+.blog-list li::before {
+  counter-increment: post;
+  content: counters(post, "", decimal-leading-zero) " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--neon-red);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:title" content="Mechanical Maestro" />
+  <meta property="og:description" content="An in-depth exploration of kernel exploitation, privilege escalation, and the Dirty COW vulnerability (CVE-2016-5195)." />
+  <meta property="og:image" content="https://l-lukke.github.io/blog/the-mechanical-maestro/images/dirty-cow-flowchart.webp" />
+  <meta property="og:url" content="https://l-lukke.github.io/blog/the-mechanical-maestro/" />
+  <meta property="og:type" content="article" />
+  <meta name="author" content="Lucas Abreu Lopes">
+  <title>Kernel: the Mechanical Maestro</title>
+
+  <link rel="icon" type="image/x-icon" href="/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/blog-post.css" />
+  <script defer src="/assets/main.js"></script>
+</head>
+
+<style>
+  .in-text-link {
+    color: var(--neon-red);
+    text-decoration: none;
+    position: relative;
+    padding: .5rem 0;
+    transition: all .3s cubic-bezier(.4, 0, .2, 1)
+  }
+
+  .in-text-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--neon-red);
+    transition: width .15s ease
+  }
+
+  .in-text-link:hover::after {
+    width: 100%
+  }
+</style>
+
+<body>
+  <div class="matrix-grid" aria-hidden="true"></div>
+  <div class="custom-cursor" aria-hidden="true"></div>
+
+  <nav class="cyber-nav" aria-label="Primary">
+    <div class="nav-container">
+      <a href="/index.html#top" class="nav-logo nav-link" style="color: var(--neon-red); text-decoration:none;">LL</a>
+      <div class="nav-links" role="menubar">
+        <a href="/index.html" class="nav-link" role="menuitem">Main Page</a>
+        <a href="../index.html" class="nav-link" role="menuitem">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="cyber-container">
+    <header class="cyber-section" id="overview">
+      <h1>Kernel: the Mechanical Maestro</h1>
+      <p class="post-meta">Tags: Kernel • Linux • Race Condition • Privilege Escalation</p>
+      <p class="post-intro">
+        This report explores the fundamentals of kernel exploitation, the motivations behind targeting the kernel, and
+        the mechanisms by which attackers exploit vulnerabilities. To situate these concepts in the context, it includes a detailed case
+        study of Dirty COW (CVE-2016-5195), a high-profile Linux kernel vulnerability that allowed unprivileged users to
+        modify read-only files by exploiting a race condition in the kernel's copy-on-write mechanism. Through this case
+        study, the report demonstrates how kernel-level vulnerabilities can be leveraged, what makes them particularly
+        dangerous, and the importance of modern mitigation strategies in defending against such attacks.
+      </p>
+
+      <nav class="post-list">
+        <ol>
+          <li><a href="#what-is-the-kernel">What actually is the Kernel?</a></li>
+          <li><a href="#why-attack-the-kernel">Why Attack the Kernel?</a></li>
+          <li><a href="#how-are-kernels-exploited">How are Kernels Exploited?</a></li>
+          <li><a href="#mitigations">Mitigations (and How Attackers Bypass Them)</a></li>
+          <li><a href="#dirty-cow">Case Study: Dirty COW (CVE-2016-5195)</a></li>
+        </ol>
+      </nav>
+    </header>
+
+    <section class="cyber-section" id="what-is-the-kernel">
+      <h2>// What actually is the Kernel?</h2>
+      <p>
+        At the risk of oversimplifying: the kernel is a consultant that programs go to when they want to do something;
+        it does everything from allocating memory, scheduling which process gets the CPU, deciding whether a file can be
+        opened or a socket can be created to translating high-level calls into hardware instructions. From the
+        perspective of a user process, it is the final authority. If the kernel refuses, the action does not happen. If
+        the kernel allows, it happens with the full backing of the machine.
+      </p>
+
+      <h3>The Job</h3>
+      <nav class="blog-list">
+        <ol>
+          <li><strong>Process Scheduling:</strong> decides which thread runs next, on which CPU, and under what
+            priority.</li>
+          <li><strong>Memory Management:</strong> carves up virtual address space, manages page tables, enforces
+            isolation, handles copy-on-write, and decides when to page, map, or kill.</li>
+          <li><strong>System Call Interface:</strong> the contract surface between untrusted user code and trusted
+            kernel services. <code>syscall</code>/<code>sysenter</code> in; validated, privileged actions out.</li>
+          <li><strong>Driver Mediation:</strong> turns messy, vendor-specific hardware behavior into stable
+            abstractions: DMA, MMIO, IRP/IOCTL.</li>
+          <li><strong>Policy Enforcement:</strong> access checks, capabilities, SELinux/AppArmor/LSM hooks on Linux;
+            tokens/ACLs/Integrity Levels on Windows.</li>
+          <li><strong>IPC & Filesystems:</strong> pipes, sockets, shared memory, VFS; the boring miracles that make
+            multitasking possible.</li>
+        </ol>
+      </nav>
+
+      <h3>Modes & Rings</h3>
+
+      <figure class="post-figure">
+        <img src="images/rings.webp" alt="rings">
+        <figcaption>Commodity OSes separate user mode from kernel mode. You'll commonly see this represented as rings
+        </figcaption>
+      </figure>
+
+      <p>
+        At the hardware level this authority is enforced by privilege rings. Most of what you run: browsers, editors,
+        games; lives in Ring 3, or user mode, where direct access to hardware is forbidden. The kernel sits in Ring 0,
+        or kernel mode, with full power to manipulate memory tables, interrupt handling, and hardware I/O. The boundary
+        between the two is the system call interface: the carefully controlled entry point through which untrusted user
+        code asks for trusted services. Crossing that boundary is routine (every time a process opens a file or sends a
+        network packet it happens) but it is also perilous. A flaw in validation here turns into a direct bridge from
+        unprivileged to absolute control.
+      </p>
+
+      <h3>What the Kernel is Not</h3>
+      <p>
+        It is important not to stretch the definition too far (a common conceptual mistake). The kernel is not the
+        absolute
+        lowest layer of the system. Beneath it lie the boot firmware, which initializes the machine, and sometimes a
+        hypervisor that virtualizes hardware for guest systems. These sit conceptually at "Ring -1", with their own
+        specialized threats (such as bootkits; a topic I'll review in depth in a future article), that may or may not be
+        delivered through kernel exploitation. Nor is
+        the
+        kernel every daemon or background service your operating system launches. Its definition is very precise: the
+        trusted core of the OS and its loadable modules or drivers, executing with the highest privilege and answerable
+        to no higher authority. Drivers deserve special mention because while they extend the kernel's reach to
+        hardware, they also expand its attack surface (signed or not, they often carry bugs of their own).
+      </p>
+
+      <h3>Why this Architectural Split Exists</h3>
+      <p>
+        Separating user mode from kernel mode brings two essential benefits: safety and performance. On the safety side,
+        user processes can crash, leak memory, or spin out of control without dragging the whole system down. On the
+        performance side, the kernel keeps exclusive authority over critical resources, preventing the anarchy that
+        would follow if every application could directly drive the disk or scribble over memory. Returning to the
+        maestro analogy, the kernel ensures that even if one instrument falters, the orchestra keeps playing in harmony
+        anyway.
+      </p>
+
+    </section>
+
+    <section class="cyber-section" id="why-attack-the-kernel?">
+      <h2>// Why Attack the Kernel?</h2>
+      <p>
+        Despite obviously being a prime target, I think it would be good to explain <strong>exactly why</strong> do
+        attackers go after the kernel through 4 main lens.
+      </p>
+
+      <h3>Persistence</h3>
+      <p>
+        The first reason is persistence. Malware in user space lives at the mercy of reboots, updates, and endpoint
+        detection agents that can quarantine or kill its processes. Kernel-level implants, however, survive across
+        system
+        restarts, often embedding themselves as drivers or patched system components. With the right registry keys or
+        module-loading hooks, they can quietly reload every time the machine powers up.
+      </p>
+
+      <h3>Escalation</h3>
+      <p>
+        The second is privilege escalation. A low-privileged foothold (code execution as a common user) can be
+        elevated directly to SYSTEM or root if the kernel is vulnerable. Suddenly an attacker who could only read a
+        directory can now write in it, disabling protections, tampering with security logs or even creating new root
+        users. So, with kernel expolits, the privilege escalation does not happen incrementally, as it is mostly
+        done; it happens binarrily.
+      </p>
+
+      <h3>Stealth</h3>
+      <p>
+        The third is stealth. Once in the kernel, malicious code has the ability to hide its tracks with far more
+        sophistication than in userland. Processes can be made invisible to task managers, files can be hidden from
+        explorers, and hooks can alter what monitoring agents "see".
+      </p>
+
+      <h3>Escape</h3>
+      <p>
+        And finally, there is escape. Many environments today rely on sandboxes, virtual machines, or containers to
+        confine potentially dangerous code. The kernel, however, is the ultimate boundary. Exploiting it can allow
+        malicious code to break free of its sandbox, reaching the host operating system or neighboring workloads. In
+        cloud and multi-tenant contexts, that kind of breakout turns from a local compromise into a systemic one.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="how-are-kernels-exploited">
+      <h2>// How are Kernels Exploited</h2>
+
+      <h3>Main vulnerability families</h3>
+      <h4>Stack/Heap Buffer Overflows</h4>
+      <p>
+        One classic flaw is the buffer overflow, where the kernel reads or writes more data than a buffer was designed
+        to hold. In kernel space, the consequences are more dire than in user space: overflows can smash critical
+        system-control structures, redirect execution, or even give the attacker direct access to arbitrary addresses.
+      </p>
+
+      <h4>Use-After-Free (UAF)</h4>
+      <p>
+        Another is the use-after-free, where memory that has been released is still accessible through a dangling
+        pointer. If an attacker can allocate new data into that same memory region, they can hijack the kernel's control
+        flow or overwrite sensitive fields.
+      </p>
+
+      <h4>Race Conditions (TOCTOU)</h4>
+      <p>
+        Race conditions are equally dangerous. A common form is time-of-check to time-of-use (TOCTOU), where the kernel
+        validates a resource at one moment (t1, for example) and then acts on it at another (t3), leaving a window (t2)
+        for an attacker to swap the already checked file for any other (which won't be checked before execution).
+      </p>
+
+      <h4>Null Pointer Dereferences</h4>
+      <p>
+        It sounds trivial, but if the kernel dereferences a null pointer and attackers can map page zero (or close to
+        it), they can smuggle their own structures into the dereference path. Modern mitigations often forbid mapping
+        null pages, but this class has produced some infamous exploits historically.
+      </p>
+
+      <h4>Logic Bugs</h4>
+      <p>
+        Not all bugs are memory-related. Sometimes the kernel simply gets its logic wrong (failing to enforce a
+        privilege check, or trusting input from user space that should never have been trusted). These mistakes may be
+        less flashy than memory corruption, but they can sometimes be just as effective.
+      </p>
+
+      <h3>From vulnerability to Exploit</h3>
+
+      <p>
+        The immediate goal of kernel exploitation is not always necessarily to drop a full blown rootkit in one shot,
+        but oftentimes to acquire the building blocks, commonly being: the ability to read/write arbitrarily in memory
+        (I/O Primitives), or to control execution flow. With those, the attacker can then chain steps together:
+        overwrite security tokens or credential structures, replace function pointers, disable defenses, and finally
+        pivot into SYSTEM.
+      </p>
+
+      <h3>Exploitation Chain Flowchart</h3>
+
+      <figure class="post-figure">
+        <img src="images/flowchart.webp" alt="flowchart">
+        <figcaption>Simple example of an attack involving a Kernel vulnerability is presented in a flowchart
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="cyber-section" id="mitigations">
+      <h2>// Mitigations (and How Attackers Bypass Them)</h2>
+      <p>
+        If kernel exploitation is such a powerful weapon, why don't we see every attacker dropping a rootkit every other
+        week? The answer is mitigations. Modern operating systems ship with a plethora of defenses specifically designed
+        to make kernel exploitation harder, riskier, and noisier.
+      </p>
+
+      <h3>Mitigation Examples</h3>
+      <p>
+        Let's walk through some of the key ones and see how they are usually bypassed:
+      </p>
+
+      <h4>Kernel Address Space Layout Randomization (KASLR)</h4>
+      <p>
+        KASLR scrambles where the kernel and its structures live in memory, denying attackers the ability to hardcode
+        addresses of functions and sensitive structures. If you don't know where the kernel is or will be, you can't
+        reliably redirect execution from another program into it.
+      </p>
+      <p>
+        <strong>Bypass:</strong> KASLR is only as strong as the absence of leaks. A single leak of a function pointer,
+        stack address, or symbol table can de-randomize the layout entirely (as nothing in computer science is
+        completely random). Attackers often chain an info leak bug with a memory corruption bug to gain precision.
+      </p>
+
+      <h4>SMEP and SMAP (Supervisor Mode Execution/Access Prevention)</h4>
+      <p>
+        Intel introduced Supervisor Mode Execution Prevention (SMEP) and Supervisor Mode Access Prevention (SMAP) to
+        limit what code in Ring 0 can do. SMEP blocks the kernel from executing instructions in user space, while SMAP
+        prevents it from directly reading or writing user space memory. These are meant to stop an attacker from simply
+        jumping back into userland shellcode or shoving fake data into kernel decision paths.
+      </p>
+      <p>
+        <strong>Bypass:</strong> Attackers respond with Return-Oriented Programming (ROP), stitching together
+        legitimate snippets of kernel code ("gadgets") into a payload that never leaves Ring 0 into userland.
+        Alternatively, some kernel exploits focus on obtaining arbitrary read/write primitives in kernel memory iself,
+        so that all malicious logic remains in kernel space without triggering SMEP/SMAP checks.
+      </p>
+
+      <h4>PatchGuard and Kernel Integrity Checks</h4>
+      <p>
+        On Windows, PatchGuard (Kernel Patch Protection) tries to defend against persistent tampering. It periodically
+        verifies that certain sensitive structures (like system call tables or interrupt descriptors) haven't been
+        altered. If it detects unauthorized changes, it forces a system crash. On Linux, different distributions rely on
+        LSMs (Linux Security Modules), integrity frameworks, or third-party monitoring.
+      </p>
+      <p>
+        <strong>Bypass:</strong> Ironically, many attackers sidestep PatchGuard entirely by abusing signed but
+        vulnerable drivers. If Microsoft or a hardware vendor signs a buggy driver, attackers can load it with full
+        kernel privileges and use it as a trampoline for exploitation. Since the driver is trusted by default,
+        PatchGuard doesn't complain; even if the driver is doing insane memory operations. This "bring your own
+        vulnerable driver" (BYOVD) technique is actually one of the most popular real-world bypasses.
+      </p>
+
+      <h4>Control-Flow Integrity (CFI) and Shadow Stacks</h4>
+      <p>
+        More recent defenses attempt to prevent attackers from arbitrarily hijacking execution. Control-Flow Integrity
+        (CFI) enforces that indirect calls and jumps land only on legitimate targets. Meanwhile, shadow stacks keep a
+        protected copy of return addresses to prevent ROP.
+      </p>
+      <p>
+        <strong>Bypass:</strong> CFI itself is very difficult to bypass; but the catch is that it depends on how
+        strictly the compiler enforces the rules. If the kernel allows multiple valid targets, an attacker might still
+        redirect execution to a gadget that's technically legal but malicious in context. Shadow stacks also don't stop
+        data-only attacks (such as modifying security tokens or privilege fields) since those never rely on hijacking
+        control flow.
+      </p>
+    </section>
+
+    <section class="cyber-section" id="dirty-cow">
+      <h2>// Case Study: Dirty COW (CVE-2016-5195)</h2>
+      <p>
+        Few kernel vulnerabilities have captured public attention the way Dirty COW did. Discovered in 2016 but present
+        in Linux since at least 2007 (!!), this bug was nicknamed after its root cause: a critical flaw in the kernel's
+        Copy-On-Write (COW) mechanism.
+      </p>
+
+      <p>
+        It was simple, reliable, cross-distro, and <strong>devastating</strong>: an unprivileged local user could write
+        to read-only files. That meant overwriting critical system files (like /etc/passwd) without root permissions,
+        and then escalating to full root access.
+      </p>
+
+      <h3>The Code</h3>
+
+      <figure class="post-figure">
+        <img src="images/dirty-cow-code.webp" alt="dirty-cow-code">
+        <figcaption>
+          Dirty COW exploit code example taken from <a
+            href="https://github.com/dirtycow/dirtycow.github.io/blob/master/dirtyc0w.c" class="in-text-link">this
+            public repo</a> (comments and imports stripped)
+        </figcaption>
+      </figure>
+
+      <p>
+        Simply put, this program races two actions against a <code>MAP_PRIVATE</code> (copy-on-write) mapping of a
+        read-only file: one thread
+        continuously calls <code>madvise(..., MADV_DONTNEED)</code> to cause the kernel to drop/repopulate pages, while
+        another
+        thread repeatedly writes new bytes into the process's memory by writing to /proc/self/mem at the mapping
+        address. Because of a race in the kernel's handling of COW / pagecache and madvise, the userland write sometimes
+        ends up contaminating the backing file (the pagecache) and later gets written back to disk (allowing an
+        unprivileged user to change a file they do not have write permission to).
+      </p>
+
+      <h4>main()</h4>
+
+      <figure class="post-figure">
+        <img src="images/main.webp" alt="dirty-cow-main">
+        <figcaption>
+          <nav class="blog-list">
+            <ol>
+              <li>
+                <strong>Argument check:</strong> the program expects two arguments: the target filename (1) and the
+                bytes/string to write into the file (2).
+              </li>
+              <li>
+                <strong>Open target file read-only:</strong> <code>f = open(argv[1], O_RDONLY)</code> opens the file
+                in read-only mode, so the process does not have legal access to write on it.
+              </li>
+              <li>
+                <strong><code>fsat(f, &st)t</code></strong> gets file size (st.st_size), that is used later for mapping
+                length.
+              </li>
+              <li>
+                <strong><code>mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, f, 0)</code></strong>: creates a new
+                mapping in the virtual address space of the calling process, passing
+                <code>NULL</code> as the suggested address to write our mapping (we actually don't care where it is
+                done, so there's no need to specify anything here); <code>st.st_size</code> as the length we took
+                earlier,
+                <code>PROT_READ</code> so that mapping is read-only from userland view; <code>MAP_PRIVATE</code> to
+                create a
+                private (copy-on-write) mapping; <code>f</code>, as the file descriptor; and 0 as the offset. Writes
+                should create private copies and not modify the underlying file
+                (here, the program also prints the returned mapping address)
+              </li>
+              <li>
+                <strong>Spawn two threads:</strong> <code>madviseThread</code>, that repeatedly calls <code>madvise(...,
+                MADV_DONTNEED)</code> and <code>procselfmemThread</code>, that opens <code>/proc/self/mem</code> and
+                repeatedly writes the
+                attacker string into the mapped address.
+              </li>
+              <li>
+                <strong>pthread_join:</strong> wait for both threads to finish.
+              </li>
+            </ol>
+          </nav>
+        </figcaption>
+      </figure>
+
+      <h4>madviseThread(void *arg)</h4>
+      <figure class="post-figure">
+        <img src="images/madvise.webp" alt="dirty-cow-madviseThread">
+        <figcaption>
+          <nav class="blog-list">
+            <ol>
+              <li>
+                <strong><code>madvise(map, 100, MADV_DONTNEED)</code></strong> tells the kernel the pages starting at
+                map (100 bytes) are not needed, so that the kernel will drop them from memory (invalidate the mapping)
+                so
+                future accesses will re-fault and repopulate pages from the file/pagecache (if this doesn't happen, we
+                end up not triggering the race condition, as the writing on the file will be done only one time).
+              </li>
+              <li>
+                The thread calls madvise in loop to continuously create windows where the kernel is
+                discarding/repopulating pages. That increases the probability of hitting the tiny timing window required
+                by the race.
+              </li>
+            </ol>
+          </nav>
+          <p>
+            <strong>Effect:</strong> <code>MADV_DONTNEED</code> causes the kernel to drop the current physical page(s)
+            for that
+            virtual range so the next access will get fresh pages (page miss -> get fresh pages -> page miss -> ...).
+          </p>
+        </figcaption>
+      </figure>
+
+      <h4>procselfmemThread(void *arg)</h4>
+      <figure class="post-figure">
+        <img src="images/proc.webp" alt="dirty-cow-procThread">
+        <figcaption>
+          <nav class="blog-list">
+            <ol>
+              <li>
+                <strong><code>/proc/self/mem</code></strong> is a special file that provides access to the process's own
+                address space. Seeking to a virtual address and writing will cause the kernel to write those bytes into
+                the process memory at that address.
+              </li>
+              <li>
+                The thread repeatedly seeks to the virtual address map and writes the attacker string there.
+              </li>
+              <li>
+                Because map is mapped <code>MAP_PRIVATE</code> and <code>PROT_READ</code>, userland writes to map
+                normally would be blocked or
+                would trigger copy-on-write behavior; but writing through /proc/self/mem is a kernel-mediated path that
+                can modify the process memory under certain conditions.
+              </li>
+            </ol>
+          </nav>
+          <p>
+            <strong>Effect:</strong> this thread is the “write” half of the race; here it tries to place data into the
+            mapped virtual address at the exact moment the kernel is performing the madvise/COW activity.
+          </p>
+        </figcaption>
+      </figure>
+
+      <h3>TLDR</h3>
+
+      <figure class="post-figure">
+        <img src="images/dirty-cow-flowchart.webp" alt="dirty-cow-flowchart">
+        <figcaption>
+          <p>
+            Here, we have to keep in sight that the order does not matter too much because the threads are running
+            simmultaneously and <em>literally a hundred million times each</em>
+          </p>
+          <nav class="blog-list">
+            <ol>
+              <li>
+                Program maps file f into memory using
+                <code>map=mmap(NULL,st.st_size,PROT_READ,MAP_PRIVATE,f,0)</code>.
+              </li>
+              <li>
+                Program writes into a copy of the file we mapped into
+                memory<code>map=mmap(NULL,st.st_size,PROT_READ,MAP_PRIVATE,f,0)</code>.
+              </li>
+              <li>
+                Kernel page-misses (because we told him to drop the first 100 bytes of the mapped
+                file in memory) here
+                <code>madvise(map,100,MADV_DONTNEED)</code> and goes back to the memory to map it again (because we
+                wanted to write in it at the third step).
+              </li>
+            </ol>
+          </nav>
+          <p>
+            The write is happening while the kernel is juggling page ownership / COW logic; the kernel
+            executes privileged code that ends up committing user-supplied bytes to the backing file. That privileged
+            code
+            path did not correctly enforce the semantics or hold locks, enabling the unprivileged change.
+          </p>
+        </figcaption>
+      </figure>
+
+      <h4>Simplified Timeline of Events</h4>
+      <nav class="blog-list">
+        <ol>
+          <li>
+            <strong>Initial state:</strong> <code>MAP_PRIVATE</code> mapping points to a page in the pagecache that
+            represents the file contents.
+          </li>
+          <li>
+            <strong>Attacker calls <code>/proc/self/mem</code> write:</strong> this triggers a kernel code path that
+            writes into the process's address space at <code>map</code>. Under normal semantics a write to a private
+            mapping should
+            create a private copy (COW) so the backing file is not changed.
+          </li>
+          <li>
+            <strong>Concurrently <code>madvise(MADV_DONTNEED)</code>:</strong> this call causes the kernel to drop the
+            page and (depending on exact timing and internal locking) re-populate/reconnect the mapping to a pagecache
+            page.
+          </li>
+          <li>
+            <strong>Buggy interleaving:</strong> due to insufficient synchronization in the kernel's handling of the
+            pagecache / COW / madvise combination, the write that should have ended up in a private anonymous copy
+            sometimes instead gets applied to the pagecache page (i.e., the very page that backs the file). Once the
+            pagecache is dirtied, it may be written back to disk, altering the underlying file even though the user has
+            no file write permission.
+          </li>
+          <li>
+            <strong>Result:</strong> the disk file's contents are changed by kernel writeback, enabling modification of
+            read-only files (e.g., replacing root's files) by an unprivileged local user.
+          </li>
+        </ol>
+      </nav>
+
+      <em>Thanks for reading. See ya.</em>
+    </section>
+
+    <section class="cyber-section" id="back">
+      <h2>// Back</h2>
+      <div class="header-icons" style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+        <a aria-label="to-blog" href="../index.html" class="contact-link">
+          <div class="icon-wrapper">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="contact-text">To Blog</span>
+        </a>
+        <a aria-label="to-main-page" href="/index.html" class="contact-link">
+          <div class="icon-wrapper">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              aria-hidden="true">
+              <path d="M13 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M19 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="contact-text">To Main Page</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

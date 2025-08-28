@@ -1,1 +1,3 @@
-1- think of something to write
+1- write about kernel exploration
+2- optimize (?)
+3- https://en.wikipedia.org/wiki/Blue_Pill_(software)
